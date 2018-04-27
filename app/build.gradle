@@ -1,0 +1,113 @@
+apply plugin: 'com.android.application'
+//apply plugin: 'me.tatarka.retrolambda'
+//apply plugin: 'com.jakewharton.butterknife'
+
+android {
+    compileSdkVersion 26
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+    }
+
+    defaultConfig {
+        applicationId "com.goldenapple.lottery"
+        minSdkVersion 15
+        targetSdkVersion 26
+        versionCode 13
+        versionName "13.0.2"
+        flavorDimensions "default"
+        setProperty("archivesBaseName", "金苹果-$versionName")
+    }
+
+    productFlavors {
+        dev {
+            applicationId "com.goldenapple.lottery"
+            resValue "string", "app_name", "金苹果"
+            resValue "string", "notification_title", "金苹果 - %s"
+        }
+
+        pro {
+            applicationId "com.goldenapple.lottery"
+            resValue "string", "app_name", "金苹果"
+            resValue "string", "notification_title", "金苹果 - %s"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    buildTypes {
+        release{
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+        }
+    }
+    dexOptions {
+        incremental true
+    }
+}
+
+
+configurations.all {
+
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        def requested = details.requested
+        if (requested.group == 'com.android.support') {
+            if (!requested.name.startsWith("multidex")) {
+                details.useVersion '26.0.2'
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:+'
+    implementation 'com.android.support:design:+'
+    implementation 'com.android.support:cardview-v7:+'
+    implementation 'com.android.support:support-v4:+'
+    implementation 'com.android.support:palette-v7:+'
+    implementation 'com.android.support:recyclerview-v7:+'
+    implementation 'com.google.code.gson:gson:+'
+    implementation 'com.jaeger.statusbarutil:library:+'
+    implementation 'com.alibaba:fastjson:1.1.54.android'
+    implementation 'com.mcxiaoke.volley:library:1.0.8'
+    implementation 'com.kogitune:pre-lollipop-activity-transition:1.0.0'
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    implementation 'com.github.thinkcool:circletextimageview:1.0.20151218'
+    implementation 'com.github.hotchemi:permissionsdispatcher:2.3.1'
+    annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.3.1'
+    implementation 'com.google.zxing:core:3.3.0'
+    implementation 'com.google.zxing:android-core:3.3.0'
+    implementation 'org.jsoup:jsoup:1.10.1'
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
+    implementation 'com.github.bumptech.glide:volley-integration:1.4.0@aar'
+    implementation 'co.lujun:androidtagview:1.1.4'
+    implementation 'com.umeng.analytics:analytics:latest.integration'
+    implementation 'com.google.android.gms:play-services-appindexing:8.4.0'
+    implementation 'in.srain.cube:ultra-ptr:1.0.11'
+    implementation 'in.srain.cube:cube-sdk:1.0.44@aar'
+    implementation 'in.srain.cube:clog:1.0.2'
+    implementation 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
+    implementation 'com.ogaclejapan.smarttablayout:utils-v4:1.6.1@aar'
+    compile('com.github.gzu-liyujiang.AndroidPicker:WheelPicker:1.5.5') {
+        exclude group: 'com.android.support'
+    }
+    //沉浸式状态栏和沉浸式导航栏管理
+    implementation 'com.gyf.barlibrary:barlibrary:2.3.0'
+
+    implementation 'io.reactivex:rxandroid:1.1.0'
+    implementation 'io.reactivex:rxjava:1.1.0'
+}
