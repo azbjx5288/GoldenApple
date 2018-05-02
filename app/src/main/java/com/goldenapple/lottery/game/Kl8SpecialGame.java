@@ -50,6 +50,15 @@ public class Kl8SpecialGame extends Game {
             danshuang(this);
         }else if("daxiao810".equals(method.getNameEn())){ //daxiao810"://大小810
             daxiao810(this);
+        }else if("wuxing".equals(method.getNameEn())){ //"wuxing"://五行
+            wuxing(this);
+        }else if("fs".equals(method.getNameEn())){//奇偶和  上中下
+
+            if(method.getId()==429){//1.彩系： 北京快乐8（彩系：KENO） 台湾宾果（彩系：KENO） 苹果快乐8分分彩（彩系：KENO） 2.玩法：奇偶和
+                jiouhe(this);
+            }else  if(method.getId()==430) {//1.彩系： 北京快乐8（彩系：KENO） 台湾宾果（彩系：KENO） 苹果快乐8分分彩（彩系：KENO） 2.玩法：上中下
+                shangzhongxia(this);
+            }
         }else{
             Log.e("ShanDongKuaiLePuKeGame", "onInflate: " + "//" + method.getNameCn() + " " + method.getNameEn() + " public static " +
                     "" + "void " + method.getNameCn() + "(Game game) {}");
@@ -65,6 +74,14 @@ public class Kl8SpecialGame extends Game {
                 return new String[]{"单","双"};//包选 PKBX;
             case "daxiao810"://daxiao810"://大小810
                 return new String[]{"大","810","小"};
+            case "wuxing"://"wuxing"://五行
+                return new String[]{"金","木","水","火","土"};
+            case "fs"://奇偶和  上中下
+                if(method.getId()==429){ //"jiouhe"://奇偶和
+                    return new String[]{"奇","偶","和"};
+                }else if(method.getId()==430){ //上中下
+                    return new String[]{"上","中","下"};
+                }
             default:
                 return new String[]{"单","双"};//包选 PKBX;
         }
@@ -154,6 +171,59 @@ public class Kl8SpecialGame extends Game {
         tv_sddds_1.setTag("810");
         tv_sddds_2.setText("小");
         tv_sddds_2.setTag("小");
+        tv_sddds_3.setVisibility(View.GONE);
+        tv_sddds_4.setVisibility(View.GONE);
+        addTopLayout(game, view);
+    }
+
+    //"wuxing"://五行
+    public  void wuxing(Game game) {
+        View view = LayoutInflater.from(game.getTopLayout().getContext()).inflate(R.layout.pick_column_kl8_special_danshuang, null, false);
+        initView(view);
+
+        tv_pick_column_title.setText("五行");
+        tv_sddds_0.setText("金");
+        tv_sddds_0.setTag("金");
+        tv_sddds_1.setText("木");
+        tv_sddds_1.setTag("木");
+        tv_sddds_2.setText("水");
+        tv_sddds_2.setTag("水");
+        tv_sddds_3.setText("火");
+        tv_sddds_3.setTag("火");
+        tv_sddds_4.setText("土");
+        tv_sddds_4.setTag("土");
+        addTopLayout(game, view);
+    }
+
+    //"jiouhe"://奇偶和
+    public  void jiouhe(Game game) {
+        View view = LayoutInflater.from(game.getTopLayout().getContext()).inflate(R.layout.pick_column_kl8_special_danshuang, null, false);
+        initView(view);
+
+        tv_pick_column_title.setText("奇偶和");
+        tv_sddds_0.setText("奇");
+        tv_sddds_0.setTag("奇");
+        tv_sddds_1.setText("偶");
+        tv_sddds_1.setTag("偶");
+        tv_sddds_2.setText("和");
+        tv_sddds_2.setTag("和");
+        tv_sddds_3.setVisibility(View.GONE);
+        tv_sddds_4.setVisibility(View.GONE);
+        addTopLayout(game, view);
+    }
+
+    //"shangzhongxia"://上中下
+    public  void shangzhongxia(Game game) {
+        View view = LayoutInflater.from(game.getTopLayout().getContext()).inflate(R.layout.pick_column_kl8_special_danshuang, null, false);
+        initView(view);
+
+        tv_pick_column_title.setText("上中下");
+        tv_sddds_0.setText("上");
+        tv_sddds_0.setTag("上");
+        tv_sddds_1.setText("中");
+        tv_sddds_1.setTag("中");
+        tv_sddds_2.setText("下");
+        tv_sddds_2.setTag("下");
         tv_sddds_3.setVisibility(View.GONE);
         tv_sddds_4.setVisibility(View.GONE);
         addTopLayout(game, view);

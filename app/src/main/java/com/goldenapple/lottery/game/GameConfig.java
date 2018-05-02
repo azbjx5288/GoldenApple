@@ -160,9 +160,13 @@ public class GameConfig {
                         case "danshuang"://单双
                         case "daxiao810"://大小810
                         case "wuxing"://五行
-                        case "jiouhe"://奇偶和
-                        case "shangzhongxia"://上中下
                             return new Kl8SpecialGame(activity, method, lottery);
+                        case "fs":
+                            if(method.getId()==429){//1.彩系： 北京快乐8（彩系：KENO） 台湾宾果（彩系：KENO） 苹果快乐8分分彩（彩系：KENO） 2.玩法：奇偶和
+                                return new Kl8SpecialGame(activity, method, lottery);
+                            }else  if(method.getId()==430) {//1.彩系： 北京快乐8（彩系：KENO） 台湾宾果（彩系：KENO） 苹果快乐8分分彩（彩系：KENO） 2.玩法：上中下
+                                return new Kl8SpecialGame(activity, method, lottery);
+                            }
                     }
                 }
             }
