@@ -151,6 +151,21 @@ public class GameConfig {
                     return new DsGame(activity, method, lottery);
             }
 
+            if (!TextUtils.isEmpty(name)) {
+                if(lottery.getId()==51//苹果快乐8分分彩
+                    ||lottery.getId()==93 //台湾宾果
+                        ||lottery.getId()==37) //北京快乐8
+                {
+                    switch (name) {
+                        case "danshuang"://单双
+                        case "daxiao810"://大小810
+                        case "wuxing"://五行
+                        case "jiouhe"://奇偶和
+                        case "shangzhongxia"://上中下
+                            return new Kl8SpecialGame(activity, method, lottery);
+                    }
+                }
+            }
             //山东11选5，除“定单双, SDDDS”
             switch (lottery.getSeriesId()) {
                 case 2://山东11选5
