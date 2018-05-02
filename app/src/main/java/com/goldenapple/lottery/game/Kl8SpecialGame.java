@@ -48,8 +48,8 @@ public class Kl8SpecialGame extends Game {
     {
         if("danshuang".equals(method.getNameEn())){      //单双
             danshuang(this);
-        }else if("danshuang".equals(method.getNameEn())){ //同花  PKTH
-            danshuang(this);
+        }else if("daxiao810".equals(method.getNameEn())){ //daxiao810"://大小810
+            daxiao810(this);
         }else{
             Log.e("ShanDongKuaiLePuKeGame", "onInflate: " + "//" + method.getNameCn() + " " + method.getNameEn() + " public static " +
                     "" + "void " + method.getNameCn() + "(Game game) {}");
@@ -63,6 +63,8 @@ public class Kl8SpecialGame extends Game {
         switch (method.getNameEn()) {
             case "danshuang"://单双
                 return new String[]{"单","双"};//包选 PKBX;
+            case "daxiao810"://daxiao810"://大小810
+                return new String[]{"大","810","小"};
             default:
                 return new String[]{"单","双"};//包选 PKBX;
         }
@@ -135,6 +137,23 @@ public class Kl8SpecialGame extends Game {
         tv_sddds_1.setText("双");
         tv_sddds_1.setTag("双");
         tv_sddds_2.setVisibility(View.GONE);
+        tv_sddds_3.setVisibility(View.GONE);
+        tv_sddds_4.setVisibility(View.GONE);
+        addTopLayout(game, view);
+    }
+
+    //daxiao810"://大小810
+    public  void daxiao810(Game game) {
+        View view = LayoutInflater.from(game.getTopLayout().getContext()).inflate(R.layout.pick_column_kl8_special_danshuang, null, false);
+        initView(view);
+
+        tv_pick_column_title.setText("大小810");
+        tv_sddds_0.setText("大");
+        tv_sddds_0.setTag("大");
+        tv_sddds_1.setText("810");
+        tv_sddds_1.setTag("810");
+        tv_sddds_2.setText("小");
+        tv_sddds_2.setTag("小");
         tv_sddds_3.setVisibility(View.GONE);
         tv_sddds_4.setVisibility(View.GONE);
         addTopLayout(game, view);

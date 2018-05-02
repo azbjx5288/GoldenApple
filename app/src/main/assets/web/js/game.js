@@ -46,6 +46,11 @@
     var planNum = function(balldata) {
         var singleNum = 0;
         switch(androidJs.getMethodName()){
+             case 'danshuang'://单双
+             case 'daxiao810'://daxiao810"://大小810
+                    singleNum = balldata['ball'][0].length;
+                    isDup = singleNum > 1 ? 1 : 0;
+                    break;
             case 'qianerfushi':
             case 'houerfushi':
                 switch(androidJs.getMethodId()){
