@@ -47,7 +47,8 @@
         var singleNum = 0;
         switch(androidJs.getMethodName()){
              case 'danshuang'://单双
-             case 'daxiao810'://daxiao810"://大小810
+             case 'daxiao810'://大小810
+             case 'wuxing'://五行
                     singleNum = balldata['ball'][0].length;
                     isDup = singleNum > 1 ? 1 : 0;
                     break;
@@ -325,7 +326,7 @@
             case 'cmc':
                 singleNum=getLocate(balldata);
                 break;
-            case 'fs': //快乐10 by ace
+            case 'fs': //快乐10，快乐8 by ace
                 switch(androidJs.getMethodId()){
                     case 416:
                         singleNum=C(getPickBallCount(balldata['ball'][0]),3);
@@ -334,6 +335,7 @@
                         singleNum=arithmetic(balldata);
                         break;
                     case 426:
+                    case 400:
                         singleNum=getLocate(balldata);
                         break;
                     case 453:
@@ -341,6 +343,29 @@
                         break;
                     case 452:
                         singleNum=budingweiGetLottery(balldata,3); //KL10 三星组选
+                        break;
+                    case 429://1.彩系： 北京快乐8（彩系：KENO） 台湾宾果（彩系：KENO） 苹果快乐8分分彩（彩系：KENO） 2.玩法：奇偶和
+                    case 430://1.彩系： 北京快乐8（彩系：KENO） 台湾宾果（彩系：KENO） 苹果快乐8分分彩（彩系：KENO） 2.玩法：上中下
+                        singleNum = balldata['ball'][0].length;
+                        isDup = singleNum > 1 ? 1 : 0;
+                         break;
+                    case 401:
+                        singleNum = getKuaiLe8(balldata,2);
+                        break;
+                    case 402:
+                        singleNum = getKuaiLe8(balldata,3);
+                        break;
+                    case 403:
+                        singleNum = getKuaiLe8(balldata,4);
+                        break;
+                    case 404:
+                        singleNum = getKuaiLe8(balldata,5);
+                        break;
+                    case 405:
+                        singleNum = getKuaiLe8(balldata,6);
+                        break;
+                    case 406:
+                        singleNum = getKuaiLe8(balldata,7);
                         break;
                     default:
                         singleNum=getLotteryDistinct(balldata);
@@ -510,6 +535,10 @@
         //tmsLength = tmsLength > ballData.ball[1].length - 1 ? 0 : tmsLength;
 
         return (dmsLength > 0 && tmsLength > 0 )? C(tmsLength, num - dmsLength) : 0;
+    };
+
+    var getKuaiLe8 = function (ballData,num){
+        return C(getPickBallCount(ballData.ball[0])+getPickBallCount(ballData.ball[1]),num);
     };
 
 	// 获取总注数（乐透彩）

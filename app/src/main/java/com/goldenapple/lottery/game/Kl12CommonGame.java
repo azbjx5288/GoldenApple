@@ -45,7 +45,7 @@ public class Kl12CommonGame extends Game
         } catch (Exception e)
         {
             e.printStackTrace();
-            Log.i("SyxwCommonGame", "onInflate: " + "//" + method.getNameCn() + " " + method.getNameEn() + method
+            Log.i("Kl12CommonGame", "onInflate: " + "//" + method.getNameCn() + " " + method.getNameEn() + method
                     .getId() + " public static void " + method.getNameEn() + method.getId() + "(Game game) {}");
             Toast.makeText(topLayout.getContext(), "不支持的类型", Toast.LENGTH_LONG).show();
         }

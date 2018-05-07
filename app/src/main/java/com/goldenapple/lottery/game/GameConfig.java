@@ -189,6 +189,8 @@ public class GameConfig {
                     return new Pk10CommonGame(activity, method, lottery);
                 case 3://苹果极速3D
                     return new Fc3dCommonGame(activity, method, lottery);
+                case 7://快乐8
+                    return new Kl8CommonGame(activity, method, lottery);
                 case 8://快乐十二
                     return new Kl12CommonGame(activity, method, lottery);
                 case 9: //快乐十分
