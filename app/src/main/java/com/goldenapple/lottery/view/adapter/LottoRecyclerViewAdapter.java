@@ -1,7 +1,6 @@
 package com.goldenapple.lottery.view.adapter;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +9,8 @@ import android.widget.TextView;
 
 import com.goldenapple.lottery.R;
 import com.goldenapple.lottery.app.BaseFragment;
-import com.goldenapple.lottery.app.GoldenAppleApp;
-import com.goldenapple.lottery.base.Preferences;
-import com.goldenapple.lottery.base.net.GsonHelper;
 import com.goldenapple.lottery.data.Lottery;
 import com.goldenapple.lottery.fragment.GameFragment;
-import com.goldenapple.lottery.fragment.GameStickNavFragment;
 import com.goldenapple.lottery.material.ConstantInformation;
 import com.goldenapple.lottery.material.RecordType;
 
@@ -74,7 +69,7 @@ public class LottoRecyclerViewAdapter extends RecyclerView.Adapter<LottoRecycler
                         Lottery lottery = items.get(position);
                         if (lottery.getStatus() == 3) {
                             addPreference(lottery);
-                            GameStickNavFragment.launch(fragment, lottery);
+                            GameFragment.launch(fragment, lottery);
                         } else {
                             fragment.tipDialog("正在测试……");
                         }

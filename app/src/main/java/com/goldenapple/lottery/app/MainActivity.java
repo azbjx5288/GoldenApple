@@ -3,10 +3,8 @@ package com.goldenapple.lottery.app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.goldenapple.lottery.BuildConfig;
@@ -19,6 +17,7 @@ import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Alashi on 2016/1/12.
@@ -51,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }*/
 
-        countDown.setTextColor(ContextCompat.getColor(this, R.color.white));
+        //countDown.setTextColor(ContextCompat.getColor(this, R.color.white));
         countDownTimer = new CountDownTimer(4000, 1000) {
             @Override
             public void onTick(long l) {
@@ -118,5 +117,12 @@ public class MainActivity extends AppCompatActivity {
             isSameVersion = Preferences.getInt(this, "app-version-code", 0) == BuildConfig.VERSION_CODE;
         }
         return isSameVersion;
+    }
+    
+    @OnClick(R.id.count_down)
+    public void onClick()
+    {
+        countDownTimer.cancel();
+        skip();
     }
 }
