@@ -11,6 +11,7 @@ import com.goldenapple.lottery.R;
 import com.goldenapple.lottery.app.GoldenAppleApp;
 import com.goldenapple.lottery.data.Lottery;
 import com.goldenapple.lottery.data.PayMoneyCommand;
+import com.goldenapple.lottery.data.PlatForm;
 import com.goldenapple.lottery.data.Series;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -37,6 +38,9 @@ import java.util.TimeZone;
  */
 public class ConstantInformation {
 
+    /*收件箱 消息的 数量*/
+    public static int MESSAGE_COUNT = -1;
+
     public static DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public static final long ONE_HOUR = 60 * 60 * 1000L;
@@ -48,7 +52,7 @@ public class ConstantInformation {
     private static List<String> issueSerials = new ArrayList<>();
     private static String infogather = "";
     private static String[] multiple = new String[235];
-    private static String sort[] = null;
+    private static List<PlatForm> platTypes = new ArrayList<>();
     private static String[] chaseissue = {"5期", "10期", "15期", "20期", "25期", "30期"};
     private static String[] province = {"深圳", "安徽", "北京", "广东", "云南", "福建", "甘肃", "广西", "贵州",
             "海南", "河北", "河南", "黑龙江", "湖北", "湖南", "吉林", "江苏", "江西", "辽宁", "内蒙古", "宁夏", "青海", "山东",
@@ -127,12 +131,42 @@ public class ConstantInformation {
         sLotteryLogo.put("CQKLSF", new int[]{R.drawable.cqkl10f, R.drawable.cqkl10f});
         //广东快乐十分
         sLotteryLogo.put("GDKLSF", new int[]{R.drawable.gdkl10f, R.drawable.gdkl10f});
+        //陕西快乐十分
+        sLotteryLogo.put("SAXKLSF", new int[]{R.drawable.jia, R.drawable.jia});
         //四川快乐十二
         sLotteryLogo.put("SCKL12", new int[]{R.drawable.sckl12, R.drawable.sckl12});
         //浙江快乐十二
         sLotteryLogo.put("ZJKL12", new int[]{R.drawable.zjkl12, R.drawable.zjkl12});
         //辽宁快乐十二
         sLotteryLogo.put("LNKL12", new int[]{R.drawable.lnkl12, R.drawable.lnkl12});
+        //台湾宾果
+        sLotteryLogo.put("TWBINGO", new int[]{R.drawable.twbg, R.drawable.twbg});
+        //北京快乐8
+        sLotteryLogo.put("BJKL8", new int[]{R.drawable.bjkl8, R.drawable.bjkl8});
+        //苹果快乐8分分彩
+        sLotteryLogo.put("PGKENO", new int[]{R.drawable.pgkl8ffc, R.drawable.pgkl8ffc});
+        //上海时时乐
+        sLotteryLogo.put("SSL", new int[]{R.drawable.shssl, R.drawable.shssl});
+        //贵州11选5
+        sLotteryLogo.put("GZ115", new int[]{R.drawable.gz115, R.drawable.gz115});
+        //天津11选5
+        sLotteryLogo.put("TJ115", new int[]{R.drawable.tj115, R.drawable.tj115});
+        //内蒙古11选5
+        sLotteryLogo.put("NMG115", new int[]{R.drawable.nmg115, R.drawable.nmg115});
+        //上海11选5
+        sLotteryLogo.put("SH115", new int[]{R.drawable.sh11x5, R.drawable.sh11x5});
+        //河北11选5
+        sLotteryLogo.put("HB115", new int[]{R.drawable.hb115, R.drawable.hb115});
+        //江苏11选5
+        sLotteryLogo.put("JS115", new int[]{R.drawable.js115, R.drawable.js115});
+        //安徽11选5
+        sLotteryLogo.put("AH115", new int[]{R.drawable.ah115, R.drawable.ah115});
+        //浙江11选5
+        sLotteryLogo.put("ZJ115", new int[]{R.drawable.zj115, R.drawable.zj115});
+        //河南快三
+        sLotteryLogo.put("HNK3", new int[]{R.drawable.hnk3, R.drawable.hnk3});
+        //辽宁11选5
+        sLotteryLogo.put("LN115", new int[]{R.drawable.ln115, R.drawable.ln115});
 
         //百家乐
         sLotteryLogo.put("gabjl", new int[]{R.drawable.ic_ga_baccarat, R.drawable.ic_ga_baccarat});
@@ -158,6 +192,31 @@ public class ConstantInformation {
         sLotteryLogo.put("gasgsgj", new int[]{R.drawable.ic_ga_sgsgj, R.drawable.ic_ga_sgsgj});
         //Ga百人牛牛
         sLotteryLogo.put("gabrnn", new int[]{R.drawable.ic_ga_brnn_br, R.drawable.ic_ga_brnn_br});
+
+        //Ga俄罗斯轮盘
+        sLotteryLogo.put("gaelslp", new int[]{R.drawable.elslp_, R.drawable.elslp_});
+        //Ga德州扑克
+        sLotteryLogo.put("gadzpk", new int[]{R.drawable.dzpk, R.drawable.dzpk});
+        //Ga神奇弹珠
+        sLotteryLogo.put("gasqdz", new int[]{R.drawable.sqdz_logo02, R.drawable.sqdz_logo02});
+        //Ga加勒比扑克
+        sLotteryLogo.put("gajlbpk", new int[]{R.drawable.jlbpk_logo, R.drawable.jlbpk_logo});
+        //Ga打鼹鼠
+        sLotteryLogo.put("gadys", new int[]{R.drawable.dds_logo, R.drawable.dds_logo});
+        //Ga大富翁
+        sLotteryLogo.put("gadfw", new int[]{R.drawable.icon_dfw, R.drawable.icon_dfw});
+        //Ga石头剪刀布
+        sLotteryLogo.put("gastjdb", new int[]{R.drawable.icon_dfw, R.drawable.icon_dfw});
+        //Ga新百家乐
+        sLotteryLogo.put("gaxbjl", new int[]{R.drawable.xbjl_logo, R.drawable.xbjl_logo});
+        //Ga三公
+        sLotteryLogo.put("gasg", new int[]{R.drawable.icon_sg, R.drawable.icon_sg});
+        //百人三公
+        sLotteryLogo.put("gabrsg", new int[]{R.drawable.br3g, R.drawable.br3g});
+        //超级龙虎斗
+        sLotteryLogo.put("gacjlhd", new int[]{R.drawable.cjlhd, R.drawable.cjlhd});
+        //奔驰宝马
+        sLotteryLogo.put("bcbm", new int[]{R.drawable.bcbm, R.drawable.bcbm});
 
         cityMap.put("深圳", new String[]{"罗湖区", "福田区", "盐田区", "南山区", "龙岗区", "宝安区", "光明新区", "市内"});
         cityMap.put("安徽", new String[]{"安庆", "蚌埠", "巢湖", "池州", "滁州", "阜阳", "合肥", "淮北", "淮南",
@@ -489,8 +548,7 @@ public class ConstantInformation {
 
     public static ArrayList<String> LEGAL_NUMBER_KL10 = new ArrayList<String>(Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"));
 
-    public static String[] NUMBER_PK10 = new String[]{"01", "02", "03", "04", "05", "06", "07",
-            "08", "09", "10",};
+    public static String[] NUMBER_PK10 = new String[]{"01", "02", "03", "04", "05", "06", "07", "08", "09", "10",};
 
     public static HashMap<String, String> DXDS_MAP = new HashMap<String, String>() {{
         put("0", "小");
@@ -523,9 +581,50 @@ public class ConstantInformation {
         put("0", "小");
         put("1", "大");
     }};
+
+    public static HashMap<String, String> SPECIAL_NUB_MAP = new HashMap<String, String>() {{
+        put("0", "豹子");
+        put("1", "顺子");
+        put("2", "对子");
+    }};
+
     public static HashMap<String, String> DRAGON_DSDS_MAP = new HashMap<String, String>() {{
         put("1", "单");
         put("0", "双");
+    }};
+
+    public static HashMap<String, String> HZ_JIOUHE_MAP = new HashMap<String, String>() {{
+        put("1", "奇");
+        put("0", "偶");
+        put("2", "和");
+    }};
+
+    public static HashMap<String, String> KL8_SZX_MAP = new HashMap<String, String>() {{
+        put("2", "上");
+        put("1", "中");
+        put("0", "下");
+    }};
+
+    public static HashMap<String, String> DAXIAO810_DX_MAP = new HashMap<String, String>() {{
+        put("2", "大");
+        put("1", "810");
+        put("0", "小");
+    }};
+
+    public static HashMap<String, String> HZ_WX_MAP = new HashMap<String, String>() {{
+        put("0", "金");
+        put("1", "木");
+        put("2", "水");
+        put("3", "火");
+        put("4", "土");
+    }};
+
+    public static HashMap<String, String> INTERVAL_TEXT_MAP = new HashMap<String, String>() {{
+        put("0", "一区");
+        put("1", "二区");
+        put("2", "三区");
+        put("3", "四区");
+        put("4", "五区");
     }};
     public static HashMap<String, String> DRAGON_ETHTX_MAP = new HashMap<String, String>() {{
         put("1", "11*");

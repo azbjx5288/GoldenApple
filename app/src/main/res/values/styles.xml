@@ -1,23 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- 沉浸式通知栏 -->
-    <style name="StatusBarTheme" parent="android:Theme.Holo.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:fitsSystemWindows">false</item>
-        <item name="colorPrimary">@color/app_main</item>
-        <item name="colorPrimaryDark">@color/app_main</item>
-        <item name="colorAccent">@color/app_main</item>
-    </style>
-
-    <style name="StatusBarNaviTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowTranslucentNavigation">true</item>
-        <item name="colorPrimary">@color/app_main</item>
-        <item name="colorPrimaryDark">@color/app_main</item>
-        <item name="colorAccent">@color/app_main</item>
-    </style>
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
@@ -161,6 +143,13 @@
         <item name="android:ellipsize">marquee</item>
     </style>
 
+    <style name="checkbox_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:scaleX">0.8</item>
+        <item name="android:scaleY">0.8</item>
+    </style>
+
     <style name="historyRadioButton">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">match_parent</item>
@@ -182,7 +171,7 @@
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowIsTranslucent">false</item>
         <item name="android:windowNoTitle">true</item>
-        <item name="android:windowBackground">@drawable/notidialog_bg</item>
+        <item name="android:windowBackground">@drawable/notidialog_background</item>
         <item name="android:backgroundDimEnabled">true</item>
     </style>
     <style name="text_18_ffffff">
@@ -285,6 +274,7 @@
         <item name="android:background">@drawable/bg_special_complete_circle_choose_ball</item>
         <item name="android:gravity">center</item>
     </style>
+
     <!-- 奖金模式选择 -->
     <style name="Widget.DiscreteSeekBar" parent="android:Widget">
         <item name="dsb_indicatorTextAppearance">@style/Widget.DiscreteIndicatorTextAppearance</item>
@@ -344,5 +334,42 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:backgroundDimEnabled">false</item>
         <!-- 模糊 -->
+    </style>
+
+    <!-- 全屏幕拉伸-->
+    <style name="layout_full">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
+    </style>
+
+    <!-- 控键自动换行布局 -->
+    <style name="WarpLinearLayoutDefault">
+        <item name="grivate">left</item>
+        <item name="horizontal_Space">20dp</item>
+        <item name="vertical_Space">20dp</item>
+        <item name="isFull">false</item>
+    </style>
+
+    <style name="tabUserItemLinearLayout">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">52dp</item>
+        <item name="android:descendantFocusability">blocksDescendants</item>
+    </style>
+
+    <style name="horizontal_divide_line">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">#e2e2e2</item>
+    </style>
+
+    <style name="tabUserItemImgArrow">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:src">@drawable/arrow_right</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginRight">15dp</item>
     </style>
 </resources>
