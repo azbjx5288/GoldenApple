@@ -123,7 +123,7 @@ public class MessageInFragment extends BaseFragment {
                 } else {
 
                     if (!mUnreadMtIdList.contains(bean.getId())) {
-                        if ("0".equals(bean.getIs_readed())//未读到已读  0:未读,1::已读取
+                        if (0==bean.getIs_readed()//未读到已读  0:未读,1::已读取
                                 && ConstantInformation.MESSAGE_COUNT > 0//
                                 ) {
                             ConstantInformation.MESSAGE_COUNT--;

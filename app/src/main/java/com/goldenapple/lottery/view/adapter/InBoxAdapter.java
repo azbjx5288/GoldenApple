@@ -106,7 +106,7 @@ public class InBoxAdapter extends BaseAdapter {
                 qQBadgeView.setBadgeNumber(0);
             }
         }*/
-        if("0".equals(bean.getIs_readed())&&!mUnreadPositionList.contains(bean.getId())) {
+        if(0==bean.getIs_readed()&&!mUnreadPositionList.contains(bean.getId())) {
             refreshTextColor(holder,parent.getContext(),false);
         }else {
             refreshTextColor(holder,parent.getContext(),true);
