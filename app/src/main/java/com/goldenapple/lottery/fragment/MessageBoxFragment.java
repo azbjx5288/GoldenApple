@@ -96,7 +96,7 @@ public class MessageBoxFragment extends BaseFragment {
                 launchFragment(OutBoxFragment.class);
                 break;
             case R.id.write_email_fragment:
-//                launchFragment(WriteEmailFragment.class);
+                launchFragment(WriteEmailFragment.class);
                 break;
 
             default:
