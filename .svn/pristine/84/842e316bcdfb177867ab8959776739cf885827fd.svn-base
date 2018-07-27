@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#FFFFFF"
+              android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/bet_history"
+        style="@style/tabUserItemLinearLayout">
+        <TextView
+            style="@style/tabUserItemText"
+            android:text="投注记录"/>
+        <!--android:drawableLeft="@drawable/touzhu_icon"-->
+        <!--<ImageView style="@style/tabUserItemImgArrow" />-->
+    </RelativeLayout>
+
+    <View style="@style/horizontal_divide_line" />
+
+    <RelativeLayout
+        android:id="@+id/trace_history"
+        style="@style/tabUserItemLinearLayout">
+        <TextView
+            style="@style/tabUserItemText"
+            android:text="追号记录"/>
+        <!--<ImageView style="@style/tabUserItemImgArrow" />-->
+    </RelativeLayout>
+
+    <View style="@style/horizontal_divide_line" />
+
+    <!--<RelativeLayout
+        android:id="@+id/ga_history"
+        style="@style/tabUserItemLinearLayout">
+        <TextView
+            style="@style/tabUserItemText"
+            android:drawableLeft="@drawable/touzhu_icon"
+            android:text="GA记录"/>
+        <ImageView style="@style/tabUserItemImgArrow" />
+    </RelativeLayout>
+
+    <View style="@style/horizontal_divide_line" />
+
+    <RelativeLayout
+        android:id="@+id/game_reports"
+        style="@style/tabUserItemLinearLayout">
+        <TextView
+            style="@style/tabUserItemText"
+            android:drawableLeft="@drawable/report_icon"
+            android:text="游戏报表"/>
+        <ImageView style="@style/tabUserItemImgArrow" />
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/game_reports_view"
+        style="@style/horizontal_divide_line" />
+
+    <RelativeLayout
+        android:id="@+id/balance_details"
+        style="@style/tabUserItemLinearLayout">
+        <TextView
+            style="@style/tabUserItemText"
+            android:drawableLeft="@drawable/balance_details_icon"
+            android:text="资金明细"/>
+        <ImageView style="@style/tabUserItemImgArrow" />
+    </RelativeLayout>
+
+    <View style="@style/horizontal_divide_line" />-->
+</LinearLayout>
+
+

@@ -1,0 +1,135 @@
+package com.goldenapple.lottery.fragment;
+
+import android.graphics.Color;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.EditText;
+import android.widget.ListView;
+
+import com.goldenapple.lottery.R;
+import com.goldenapple.lottery.app.LazyBaseFragment;
+import com.goldenapple.lottery.base.net.RestCallback;
+import com.goldenapple.lottery.base.net.RestRequest;
+import com.goldenapple.lottery.base.net.RestResponse;
+import com.goldenapple.lottery.data.LotteryCode;
+import com.goldenapple.lottery.data.UserListBean;
+import com.goldenapple.lottery.data.UserListCommand;
+import com.goldenapple.lottery.view.adapter.HistoryCodeAdapter;
+import com.goldenapple.lottery.view.adapter.LowerMemberAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.OnClick;
+
+
+/**
+ 精准开户
+ */
+
+public class OpenAccountAccurateFragment extends LazyBaseFragment {
+    private static final String TAG = OpenAccountAccurateFragment.class.getSimpleName();
+
+    private static final int ID_USER_LIST = 1;
+
+    @BindView(R.id.edit_name)
+    EditText edit_name;
+    @BindView(R.id.listView)
+    ListView listView;
+    @BindView(R.id.refreshLayout)
+    SwipeRefreshLayout refreshLayout;
+
+    private HistoryCodeAdapter adapter;
+
+    private List<UserListBean>  mItems;
+
+    private boolean isLoading;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflateView(inflater, container, false, "精准开户", R.layout.fragment_open_account_accurate, true, true);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+//        adapter = new HistoryCodeAdapter(lottery,getContext());
+        refreshLayout.setColorSchemeColors(Color.parseColor("#ff0000"), Color.parseColor("#00ff00"), Color.parseColor("#0000ff"), Color.parseColor("#f234ab"));
+        refreshLayout.setOnRefreshListener(() -> loadUserList());
+
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+
+            @Override
+            public void onScrollStateChanged(AbsListView arg0, int arg1) {
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+            }
+        });
+        listView.setAdapter(adapter);
+        refreshLayout.setRefreshing(false);
+        isLoading = false;
+        loadUserList();
+    }
+    private void loadUserList() {
+        if (isLoading) {
+            return;
+        }
+        UserListCommand command = new UserListCommand();
+//        TypeToken typeToken = new TypeToken<RestResponse<ArrayList<LotteryCode>>>() {
+//        };
+     //   RestRequest restRequest = RestRequestManager.createRequest(getActivity(), command, typeToken, restCallback, ID_USER_LIST, this);
+//        RestResponse restResponse = restRequest.getCache();
+//        if (restResponse != null && restResponse.getData() instanceof ArrayList<?>) {
+//            items=(ArrayList<LotteryCode>) restResponse.getData();
+//            adapter.setData(items);
+//        }
+//        restRequest.execute();
+        executeCommand(command, restCallback, ID_USER_LIST);
+    }
+    @OnClick({R.id.edit_name, R.id.btn_search})
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_search:
+                launchFragment(BalanceTableFragment.class);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private RestCallback restCallback = new RestCallback() {
+        @Override
+        public boolean onRestComplete(RestRequest request, RestResponse response) {
+            if (request.getId() == ID_USER_LIST) {
+                mItems=(ArrayList<UserListBean>) response.getData();
+//                adapter.setData(mItems);
+            }
+            return true;
+        }
+
+        @Override
+        public boolean onRestError(RestRequest request, int errCode, String errDesc) {
+            if(errCode == 3004 || errCode == 2016){
+                signOutDialog(getActivity(),errCode);
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public void onRestStateChanged(RestRequest request, @RestRequest.RestState int state) {
+            if (request.getId() == ID_USER_LIST){
+                refreshLayout.setRefreshing(state == RestRequest.RUNNING);
+                isLoading = state == RestRequest.RUNNING;
+            }
+        }
+    };
+}

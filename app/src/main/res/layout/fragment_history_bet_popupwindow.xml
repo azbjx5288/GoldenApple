@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.cpiz.android.bubbleview.BubbleLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/popup_bubble"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="5dp"
+    android:orientation="vertical">
+
+        <ListView
+            android:id="@+id/listView"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="6dp"/>
+</com.cpiz.android.bubbleview.BubbleLinearLayout>
