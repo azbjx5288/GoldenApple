@@ -3,17 +3,16 @@ package com.goldenapple.lottery.fragment;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -21,18 +20,22 @@ import android.widget.Toast;
 
 import com.goldenapple.lottery.R;
 import com.goldenapple.lottery.app.BaseFragment;
+import com.goldenapple.lottery.base.net.JsonString;
 import com.goldenapple.lottery.base.net.RestCallback;
 import com.goldenapple.lottery.base.net.RestRequest;
 import com.goldenapple.lottery.base.net.RestRequestManager;
 import com.goldenapple.lottery.base.net.RestResponse;
+import com.goldenapple.lottery.data.GetUserLetterInfoCommand;
 import com.goldenapple.lottery.data.SendMsgCommand;
 import com.goldenapple.lottery.data.UserListBean;
 import com.goldenapple.lottery.data.UserListCommand;
 import com.goldenapple.lottery.view.CustomScrollView;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -40,11 +43,14 @@ import butterknife.OnClick;
 
 public class WriteEmailFragment extends BaseFragment implements RadioGroup.OnCheckedChangeListener{
 
-    private static final int TRACE_SENDMSG_COMMAND = 1;
-    private static final int TRACE_LOWER_ID = 2;
+    private  final int TRACE_SENDMSG_COMMAND = 1;
+    private  final int TRACE_LOWER_ID = 2;
+    private  final int GETUSERLETTER_INFO_COMMAND=3;
 
     @BindView(R.id.manner_radiogroup)
     RadioGroup mannerRadiogroup;
+    @BindView(R.id.ownership)
+    RadioButton ownership;
     @BindView(R.id.addressee)
     Spinner spinner ;
     @BindView(R.id.add_user)
@@ -62,7 +68,7 @@ public class WriteEmailFragment extends BaseFragment implements RadioGroup.OnChe
 
     private List<UserListBean> mLowerList = new ArrayList<>();
     private  ArrayList<String> lowerNameList;
-
+    private  boolean  mIsTopAgent=false;//是否是总代
 
     private  int  mUserType=1;//1:上级2:所有下级3:单一下级
     private  int  mReceiver;//1:上级2:所有下级3:单一下级
@@ -77,13 +83,13 @@ public class WriteEmailFragment extends BaseFragment implements RadioGroup.OnChe
         super.onViewCreated(view, savedInstanceState);
         mannerRadiogroup.setOnCheckedChangeListener(this);
 
-
         UserListCommand command = new UserListCommand();
-        TypeToken typeToken = new TypeToken<RestResponse<ArrayList<UserListBean>>>() {
-        };
+        TypeToken typeToken = new TypeToken<RestResponse<ArrayList<UserListBean>>>() {};
         RestRequest restRequest = RestRequestManager.createRequest(getActivity(), command, typeToken, restCallback, TRACE_LOWER_ID, this);
         restRequest.execute();
 
+        GetUserLetterInfoCommand command2 = new GetUserLetterInfoCommand();
+        executeCommand(command2, restCallback, GETUSERLETTER_INFO_COMMAND);;
     }
 
     @Override
@@ -101,53 +107,22 @@ public class WriteEmailFragment extends BaseFragment implements RadioGroup.OnChe
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         switch (checkedId) {
             case R.id.prefect:
-                mUserType=1;
+                mUserType=2;
                 send_member.setVisibility(View.GONE);
                 break;
             case R.id.follower:
-                mUserType=2;
+                mUserType=3;
                 send_member.setVisibility(View.VISIBLE);
                 break;
             case R.id.ownership:
-                mUserType=3;
+                mUserType=1;
                 send_member.setVisibility(View.GONE);
                 break;
         }
     }
     @OnClick(R.id.add_user)
     public void addUser() {
-//        if(lowerList.size()==0){
-//            showToast("请稍等,正在加载数据");
-//            return;
-//        }
-//        hasAddUser=true;
-//
-//        View view=LayoutInflater.from(getContext()).inflate(R.layout.user_cloud_choose, null, false);
-//        userTagCloud=(TagCloudViewEdit)view.findViewById(R.id.tag_cloud_view);
-//        userTagCloud.setTags(tags);
-//        userTagCloud.setOnTagClickListener(this);
-//        userTagCloud.setOnTagClickListener(new TagCloudViewEdit.OnTagClickListener() {
-//            @Override
-//            public void onTagClick(int position) {
-//                bindPositionView(position);
-//                LowerTips lowerTips=lowerList.get(position);
-//                List<String> textSpan = addresseeText.getAllReturnStringList();
-//                int index=textSpan.indexOf(lowerTips.getUsername());
-//                if(index!=-1){
-//                    showToast("该用户已经被选择");
-//                }else{
-//                    textSpan.add(textSpan.size(),lowerTips.getUsername());
-//                    if (textSpan.size()>0) {
-//                        addresseeText.setText("");
-//                        for (String str : textSpan) {
-//                            addresseeText.addSpan(str, str);
-//                        }
-//                    }
-//                }
-//            }
-//        });
-
-//        tipDialog("选择用户",view);
+        spinner.performClick();
     }
 
     @OnClick({R.id.submit})
@@ -187,30 +162,43 @@ public class WriteEmailFragment extends BaseFragment implements RadioGroup.OnChe
                         mLowerList=(ArrayList<UserListBean>)  response.getData();
 
                         lowerNameList= new ArrayList<String>();
+//                        lowerNameList.add("请选择某一个下级");
                         for (int i = 0; i < mLowerList.size(); i++) {
                             lowerNameList.add(mLowerList.get(i).getUsername());
                         }
                         MyAdapter adapter =  new MyAdapter();
                         spinner.setAdapter(adapter);
                         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view,
                                                        int position, long id) {
                                 mReceiver=mLowerList.get(position).getId();
                             }
-
                             @Override
                             public void onNothingSelected(AdapterView<?> arg0) {
                             }
 
                         });
-
                     }
                     break;
                 case TRACE_SENDMSG_COMMAND:
                     submit.setEnabled(true);
-                    showToast(response.getError());
+//                    showToast(response.getError());
+                    tipDialog(response.getError());
+                    break;
+                case GETUSERLETTER_INFO_COMMAND:
+                    String jsonString= ((JsonString) response.getData()).getJson();
+                    try {
+                        JSONObject jsonObject = new JSONObject(jsonString);
+                        mIsTopAgent=jsonObject.getBoolean("is_top_agent");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    if(mIsTopAgent){
+                        ownership.setVisibility(View.VISIBLE);
+                    }else {
+                        ownership.setVisibility(View.GONE);
+                    }
                     break;
             }
             return true;
@@ -261,7 +249,6 @@ public class WriteEmailFragment extends BaseFragment implements RadioGroup.OnChe
             view.setTag(tv_name);
             return view;
         }
-
     }
 
 }

@@ -3,21 +3,26 @@ package com.goldenapple.lottery.fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.goldenapple.lottery.R;
+import com.goldenapple.lottery.app.ContainerActivity;
 import com.goldenapple.lottery.app.GoldenAppleApp;
 import com.goldenapple.lottery.app.LazyBaseFragment;
+import com.goldenapple.lottery.base.net.JsonString;
 import com.goldenapple.lottery.base.net.RestCallback;
 import com.goldenapple.lottery.base.net.RestRequest;
 import com.goldenapple.lottery.base.net.RestRequestManager;
 import com.goldenapple.lottery.base.net.RestResponse;
 import com.goldenapple.lottery.component.CustomDialog;
 import com.goldenapple.lottery.component.DialogLayout;
+import com.goldenapple.lottery.data.GetLetterInfoCommand;
 import com.goldenapple.lottery.data.LogoutCommand;
 import com.goldenapple.lottery.data.RechargeUrl;
 import com.goldenapple.lottery.data.RechargeUrlCommand;
@@ -26,8 +31,12 @@ import com.goldenapple.lottery.data.UserInfoCommand;
 import com.goldenapple.lottery.pattern.VersionChecker;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import butterknife.BindView;
 import butterknife.OnClick;
+import q.rorbin.badgeview.QBadgeView;
 
 
 /**
@@ -43,6 +52,7 @@ public class FragmentUser extends LazyBaseFragment {
     private static final int ID_USER_INFO = 1;
     private static final int ID_LOGOUT = 2;
     private static final int ID_RECHARGE = 3;
+    private int LIST = 4;
 
     @BindView(R.id.user_name)
     TextView userName;
@@ -55,7 +65,10 @@ public class FragmentUser extends LazyBaseFragment {
     @BindView(R.id.link_openaccount_ll)
     LinearLayout link_openaccount_ll;
     private UserInfo userInfo;
-
+//    @BindView(R.id.station_letter_badge)
+//    TextView station_letter_badge;
+    @BindView(R.id.station_letter_icon)
+    ImageView station_letter_icon;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflateView(inflater, container, false, "账号中心", R.layout.fragment_user, true, true);
@@ -116,6 +129,12 @@ public class FragmentUser extends LazyBaseFragment {
             accurate_openaccount_ll.setVisibility(View.GONE);
             link_openaccount_ll.setVisibility(View.GONE);
         }
+    }
+
+    private void GetLetterInfo() {
+        GetLetterInfoCommand command = new GetLetterInfoCommand();
+
+        executeCommand(command, restCallback, LIST);
     }
 
     @OnClick({R.id.balance_details, R.id.withdraw_deposit, R.id.rebates_setting, R.id.notice, R.id.customer_service,
@@ -223,6 +242,7 @@ public class FragmentUser extends LazyBaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        GetLetterInfo();
     }
 
     private void handleExit() {
@@ -261,6 +281,39 @@ public class FragmentUser extends LazyBaseFragment {
                     showToast("充值中心正在维护!请耐心等待通知...");
                 } else {
                     HtmlFragment.launch(FragmentUser.this, rechargeUrl.getUrl(), "充值中心");
+                }
+            }else  if (request.getId() == LIST) {
+                if (request.getId() == 0) {
+                    String jsonString= ((JsonString) response.getData()).getJson();
+
+                    boolean  isShow=false;
+                    try {
+                        JSONObject jsonObject = new JSONObject(jsonString);
+                        isShow=jsonObject.getInt("is_show")==1?true:false;
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    int totalCount;
+
+                    if(isShow){
+                        totalCount =-1;
+                    }else{
+                        totalCount =0;
+                    }
+
+                    Object  tag=station_letter_icon.getTag();
+                    if(tag==null){
+                        QBadgeView qBadgeView=new QBadgeView(getActivity());
+                        qBadgeView.bindTarget(station_letter_icon);
+                        qBadgeView.setBadgeGravity(Gravity.END | Gravity.TOP);
+                        qBadgeView.setBadgeNumber(totalCount);
+                        station_letter_icon.setTag(qBadgeView);
+                    }else{
+                        QBadgeView qQBadgeView=(QBadgeView)tag;
+                        qQBadgeView.setBadgeNumber(totalCount);
+                    }
+
                 }
             }
             return true;

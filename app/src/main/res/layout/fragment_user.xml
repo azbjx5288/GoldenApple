@@ -231,11 +231,42 @@
 
             <View style="@style/divideLine" />
 
-            <TextView
+      <!--      <TextView
                 android:id="@+id/station_letter"
                 style="@style/tabUserItemText"
                 android:drawableLeft="@drawable/notice"
                 android:text="站内信" />
+-->
+            <RelativeLayout
+                android:id="@+id/station_letter"
+                style="@style/tabUserItemLinearLayout">
+
+                <ImageView
+                    android:id="@+id/station_letter_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="32dp"
+                    android:src="@drawable/notice"/>
+
+                <TextView
+                    android:id="@+id/station_letter_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="8dp"
+                    android:layout_toRightOf="@+id/station_letter_icon"
+                    android:textColor="@color/black"
+                    android:text="站内信"
+                    />
+                <TextView
+                    android:id="@+id/station_letter_badge"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="-5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_toRightOf="@+id/station_letter_icon"/>
+            </RelativeLayout>
 
             <View style="@style/divideLine" />
 

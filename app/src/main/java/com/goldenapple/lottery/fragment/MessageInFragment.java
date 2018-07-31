@@ -123,15 +123,10 @@ public class MessageInFragment extends BaseFragment {
                 } else {
 
                     if (!mUnreadMtIdList.contains(bean.getId())) {
-                        if (0==bean.getIs_readed()//未读到已读  0:未读,1::已读取
-                                && ConstantInformation.MESSAGE_COUNT > 0//
-                                ) {
-                            ConstantInformation.MESSAGE_COUNT--;
-                        }
                         mUnreadMtIdList.add(String.valueOf(bean.getId()));
                     }
 
-                    BoxDetailsFragment.launch(MessageInFragment.this, String.valueOf(bean.getId()), "receive");
+                    BoxDetailsFragment.launch(MessageInFragment.this, bean.getId(), "receive");
                 }
 
             }

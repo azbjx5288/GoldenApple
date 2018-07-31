@@ -13,18 +13,16 @@ import android.widget.TextView;
 
 import com.goldenapple.lottery.R;
 import com.goldenapple.lottery.app.BaseFragment;
+import com.goldenapple.lottery.base.net.JsonString;
 import com.goldenapple.lottery.base.net.RestCallback;
 import com.goldenapple.lottery.base.net.RestRequest;
-import com.goldenapple.lottery.base.net.RestRequestManager;
 import com.goldenapple.lottery.base.net.RestResponse;
 import com.goldenapple.lottery.component.CustomDialog;
-import com.goldenapple.lottery.data.ReceiveBoxCommand;
-import com.goldenapple.lottery.data.ReceiveBoxResponse;
+import com.goldenapple.lottery.data.GetLetterInfoCommand;
 import com.goldenapple.lottery.game.PromptManager;
-import com.goldenapple.lottery.material.ConstantInformation;
-import com.google.gson.reflect.TypeToken;
 
-import java.util.ArrayList;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -68,22 +66,17 @@ public class MessageBoxFragment extends BaseFragment {
 
     }
 
-    private void loadReceiveBox() {
-        ReceiveBoxCommand command = new ReceiveBoxCommand();
-        command.setPage(1);
+    private void GetLetterInfo() {
+        GetLetterInfoCommand command = new GetLetterInfoCommand();
 
-        TypeToken typeToken = new TypeToken<RestResponse<ArrayList<ReceiveBoxResponse>>>() {
-        };
-        RestRequestManager.executeCommand(getActivity(), command, typeToken, restCallback, LIST, this);
+        executeCommand(command, restCallback, LIST);
     }
 
     @Override
     public void onResume() {
         Log.i(TAG, "onResume");
         super.onResume();
-        if(ConstantInformation.MESSAGE_COUNT==-1){
-            loadReceiveBox();
-        }
+        GetLetterInfo();
     }
 
     @OnClick({R.id.in_box_fragment, R.id.out_box_fragment, R.id.write_email_fragment})
@@ -104,20 +97,28 @@ public class MessageBoxFragment extends BaseFragment {
         }
     }
 
-    private RestCallback restCallback = new RestCallback<ReceiveBoxResponse>() {
+    private RestCallback restCallback = new RestCallback() {
         @Override
-        public boolean onRestComplete(RestRequest request, RestResponse<ReceiveBoxResponse> response) {
+        public boolean onRestComplete(RestRequest request, RestResponse response) {
 
             if (request.getId() == LIST) {
-//                ReceiveBoxResponse receiveBoxResponse = (ReceiveBoxResponse) (response.getData());
-                int totalCount =1;//=receiveBoxResponse.getList().size();// Integer.parseInt(receiveBoxResponse.getCount());//解决服务端 返回数据 有缓存的 问题
-                if(totalCount>0){
+                String jsonString= ((JsonString) response.getData()).getJson();
+
+                boolean  isShow=false;
+                try {
+                    JSONObject jsonObject = new JSONObject(jsonString);
+                    isShow=jsonObject.getInt("is_show")==1?true:false;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                int totalCount;
+
+                if(isShow){
                     totalCount =-1;
                 }else{
                     totalCount =0;
                 }
-
-//                new QBadgeView(getActivity()).bindTarget(in_box_text).setBadgeGravity(Gravity.TOP | Gravity.CENTER).setBadgeNumber(totalCount);
 
                 Object  tag=in_box_badge.getTag();
 

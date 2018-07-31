@@ -37,9 +37,6 @@ import java.util.TimeZone;
  */
 public class ConstantInformation {
 
-    /*收件箱 消息的 数量*/
-    public static int MESSAGE_COUNT = -1;
-
     public static DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public static final long ONE_HOUR = 60 * 60 * 1000L;

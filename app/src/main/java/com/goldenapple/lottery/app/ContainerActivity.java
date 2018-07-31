@@ -15,10 +15,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.goldenapple.lottery.R;
+import com.goldenapple.lottery.base.net.JsonString;
 import com.goldenapple.lottery.base.net.RestCallback;
 import com.goldenapple.lottery.base.net.RestRequest;
 import com.goldenapple.lottery.base.net.RestRequestManager;
 import com.goldenapple.lottery.base.net.RestResponse;
+import com.goldenapple.lottery.data.GetLetterInfoCommand;
 import com.goldenapple.lottery.data.ReceiveBoxCommand;
 import com.goldenapple.lottery.data.ReceiveBoxResponse;
 import com.goldenapple.lottery.fragment.FragmentHistory;
@@ -29,6 +31,10 @@ import com.goldenapple.lottery.material.ConstantInformation;
 import com.goldenapple.lottery.view.adapter.TabsPagerAdapter;
 import com.google.gson.reflect.TypeToken;
 import com.umeng.analytics.MobclickAgent;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,6 +59,7 @@ public class ContainerActivity extends AppCompatActivity {
     private ViewPager mVPager;
     //退出时的时间
     private long exitTime;
+    private ImageView mImgViewTag;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,18 +68,17 @@ public class ContainerActivity extends AppCompatActivity {
         tabHost = findViewById(android.R.id.tabhost);
         mVPager = findViewById(R.id.tabpager);
         initView();
-        if(ConstantInformation.MESSAGE_COUNT==-1){
-            loadReceiveBox();
-        }
+        GetLetterInfo();
     }
 
-    private void loadReceiveBox() {
-        ReceiveBoxCommand command = new ReceiveBoxCommand();
-        command.setPage(1);
+    private void GetLetterInfo() {
+        GetLetterInfoCommand command = new GetLetterInfoCommand();
 
-        TypeToken typeToken = new TypeToken<RestResponse<ArrayList<ReceiveBoxResponse>>>() {
-        };
-        RestRequestManager.executeCommand(this, command, typeToken, restCallback, LIST, this);
+        executeCommand(command, restCallback, LIST);
+    }
+
+    private RestRequest executeCommand(Object command, RestCallback callback, int id) {
+        return RestRequestManager.executeCommand(this, command, callback, id, this);
     }
 
     private void initView() {
@@ -133,7 +139,7 @@ public class ContainerActivity extends AppCompatActivity {
         }
         return tabSpec;
     }
-    ImageView mImgViewTag;
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -168,16 +174,23 @@ public class ContainerActivity extends AppCompatActivity {
 
             if (request.getId() == LIST) {
                 if (request.getId() == 0) {
-//                    ReceiveBoxResponse receiveBoxResponse = (ReceiveBoxResponse) (response.getData());
-                    int totalCount=1;// //=receiveBoxResponse.getList().size();// Integer.parseInt(receiveBoxResponse.getCount());// 解决服务端 返回数据 有缓存的 问题
-                    ConstantInformation.MESSAGE_COUNT=totalCount;
+                    String jsonString= ((JsonString) response.getData()).getJson();
 
-                    if(totalCount>0){
+                    boolean  isShow=false;
+                    try {
+                        JSONObject jsonObject = new JSONObject(jsonString);
+                        isShow=jsonObject.getInt("is_show")==1?true:false;
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    int totalCount;
+
+                    if(isShow){
                         totalCount =-1;
                     }else{
                         totalCount =0;
                     }
-
 
                     Object  tag=mImgViewTag.getTag();
                     if(tag==null){

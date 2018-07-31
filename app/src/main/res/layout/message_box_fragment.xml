@@ -22,7 +22,7 @@
             android:layout_toRightOf="@+id/in_box_text_img"
             android:layout_width="wrap_content"
             android:layout_height="52dp"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="8dp"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
             android:textColor="@color/black"

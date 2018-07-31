@@ -15,9 +15,18 @@ import com.goldenapple.lottery.app.FragmentLauncher;
 import com.goldenapple.lottery.base.net.RestCallback;
 import com.goldenapple.lottery.base.net.RestRequest;
 import com.goldenapple.lottery.base.net.RestRequestManager;
+import com.goldenapple.lottery.base.net.RestResponse;
 import com.goldenapple.lottery.component.CustomDialog;
+import com.goldenapple.lottery.data.GetLetterDetailBean;
+import com.goldenapple.lottery.data.GetLetterDetailCommand;
+import com.goldenapple.lottery.data.GetSendLetterDetailBean;
+import com.goldenapple.lottery.data.GetSendLetterDetailCommand;
+import com.goldenapple.lottery.data.UserListBean;
+import com.goldenapple.lottery.data.UserListCommand;
 import com.goldenapple.lottery.game.PromptManager;
 import com.google.gson.reflect.TypeToken;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 
@@ -35,12 +44,15 @@ public class BoxDetailsFragment extends BaseFragment {
     TextView time;
     @BindView(R.id.content)
     TextView content;
-    private String msg_id;
+    private int msg_id;
     private String msgType;
 
-    public static void launch(BaseFragment fragment, String msg_id, String msgType) {
+    private final int RECEIVE=0;
+    private final int SEND=1;
+
+    public static void launch(BaseFragment fragment, int msg_id, String msgType) {
         Bundle bundle = new Bundle();
-        bundle.putString("msg_id", msg_id);
+        bundle.putInt("msg_id", msg_id);
         bundle.putString("msgType", msgType);
         FragmentLauncher.launch(fragment.getActivity(), BoxDetailsFragment.class, bundle);
     }
@@ -48,7 +60,7 @@ public class BoxDetailsFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        msg_id = getArguments().getString("msg_id");
+        msg_id = getArguments().getInt("msg_id");
         msgType = getArguments().getString("msgType");//receive:收件箱，send:发件箱
         if ("receive".equals(msgType)) {
             return inflateView(inflater, container, false, "收件箱", R.layout.box_details, true, true);
@@ -61,54 +73,62 @@ public class BoxDetailsFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        loadDate();
+        if ("receive".equals(msgType)) {//收件箱
+            GetLetterDetailCommand command = new GetLetterDetailCommand();
+            command.setId(msg_id);
+            TypeToken typeToken = new TypeToken<RestResponse<GetLetterDetailBean>>() {
+            };
+            RestRequest restRequest = RestRequestManager.createRequest(getActivity(), command, typeToken, restCallback, RECEIVE, this);
+            restRequest.execute();
+        } else {//发件箱
+            GetSendLetterDetailCommand command = new GetSendLetterDetailCommand();
+            command.setId(msg_id);
+            TypeToken typeToken = new TypeToken<RestResponse<GetSendLetterDetailBean>>() {
+            };
+            RestRequest restRequest = RestRequestManager.createRequest(getActivity(), command, typeToken, restCallback, SEND, this);
+            restRequest.execute();
+
+        }
     }
 
-    private void loadDate() {
-//        ReceiveBoxDetailCommand command = new ReceiveBoxDetailCommand();
-//        command.setMsg_id(Integer.parseInt(msg_id));
-//        command.setMsgType(msgType);
-//        TypeToken typeToken = new TypeToken<RestResponse<ReceiveBoxDetailResponse>>() {
-//        };
-//        RestRequestManager.executeCommand(getActivity(), command, typeToken, restCallback, 0, this);
 
-    }
+    private RestCallback restCallback = new RestCallback() {
+        @Override
+        public boolean onRestComplete(RestRequest request, RestResponse response) {
+            switch (request.getId()) {
+                case RECEIVE:
+                    GetLetterDetailBean detail = (GetLetterDetailBean) response.getData();
 
-//    private RestCallback restCallback = new RestCallback<ReceiveBoxDetailResponse>() {
-//        @Override
-//        public boolean onRestComplete(RestRequest request, RestResponse<ReceiveBoxDetailResponse> response) {
-//            ReceiveBoxDetailResponse detail = response.getData();
-//
-//            ReceiveBoxDetailResponse.MessageBean messageBean = detail.getMessage();
-//
-//            user_name.setText(detail.getUsername());
-//            title.setText(messageBean.getTitle());
-//            time.setText(messageBean.getCreate_time());
-//            content.setText(messageBean.getContent());
-//            return true;
-//        }
-//
-//        @Override
-//        public boolean onRestError(RestRequest request, int errCode, String errDesc) {
-//            if (errCode == 7003) {
-//                Toast.makeText(getActivity(), "正在更新服务器请稍等", Toast.LENGTH_LONG).show();
-//                return true;
-//            } else if (errCode == 7006) {
-//                CustomDialog dialog = PromptManager.showCustomDialog(getActivity(), "重新登录", errDesc, "重新登录", errCode);
-//                dialog.setCancelable(false);
-//                dialog.show();
-//                return true;
-//            }
-//            return false;
-//        }
-//
-//        @Override
-//        public void onRestStateChanged(RestRequest request, @RestRequest.RestState int state) {
-//            if (state == RestRequest.RUNNING) {
-//                showProgress("加载中...");
-//            } else {
-//                hideProgress();
-//            }
-//        }
-//    };
+                    user_name.setText(detail.getSender());
+                    title.setText(detail.getMsg_title());
+                    time.setText(detail.getCreated_at());
+                    content.setText(detail.getMsg_content());
+                    break;
+                case SEND:
+                    GetSendLetterDetailBean bean = (GetSendLetterDetailBean) response.getData();
+
+                    user_name.setText(bean.getSender());
+                    title.setText(bean.getMsg_title());
+                    time.setText(bean.getCreated_at());
+                    content.setText(bean.getMsg_content());
+
+                    break;
+            }
+
+            return true;
+        }
+
+        @Override
+        public boolean onRestError(RestRequest request, int errCode, String errDesc) {
+            if(errCode == 3004 || errCode == 2016){
+                signOutDialog(getActivity(),errCode);
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public void onRestStateChanged(RestRequest request, @RestRequest.RestState int state) {
+        }
+    };
 }

@@ -47,20 +47,21 @@
                         android:layout_height="wrap_content"
                         android:checked="true"
                         android:layout_weight="1"
-                        android:text="所有上级" />
+                        android:text="所有下级" />
 
                     <RadioButton
                         android:id="@+id/follower"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="单一" />
+                        android:text="单一下级" />
 
                     <RadioButton
                         android:id="@+id/ownership"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:visibility="gone"
                         android:text="上级" />
 
                 </RadioGroup>
@@ -75,8 +76,6 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:orientation="horizontal">
-
-
 
                 <FrameLayout
                     android:layout_width="0dp"
