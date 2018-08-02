@@ -1,5 +1,7 @@
 package com.goldenapple.lottery.fragment;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -84,6 +86,14 @@ public class OpenAccountAccurateFragment extends LazyBaseFragment
     @BindView(R.id.rebates_setting_btn)
     Button rebatesSettingBtn;
     Unbinder unbinder;
+    @BindView(R.id.bonus_danguan_tv)
+    TextView bonus_danguan_tv;
+    @BindView(R.id.bonus_hunhe_tv)
+    TextView bonus_hunhe_tv;
+    @BindView(R.id.bonus_ag_tv)
+    TextView bonus_ag_tv;
+    @BindView(R.id.bonus_game_tv)
+    TextView bonus_game_tv;
     
     private static final int GET_USER_INFO_COMMAND = 1;
     private static final int SUBMIT_COMMAND = 2;
@@ -126,7 +136,7 @@ public class OpenAccountAccurateFragment extends LazyBaseFragment
             if (proxy.isChecked())
                 type = "代理";
             else if (user.isChecked())
-                type = "普通用户";
+                type = "玩家";
             else
                 type = "";
             /*stringBuilder.append("用户类型：" + type + "   ");
@@ -139,10 +149,12 @@ public class OpenAccountAccurateFragment extends LazyBaseFragment
             stringBuilder.append("AG游戏：" + bonusAg.getText().toString() + "%   ");
             stringBuilder.append("GA游戏：" + bonusAg.getText().toString() + "%\n");*/
             
-            CustomDialog.Builder builder = new CustomDialog.Builder(getContext());
+//            CustomDialog.Builder builder = new CustomDialog.Builder(getContext());
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
             View displayView = LayoutInflater.from(getContext()).inflate(R.layout.alert_dialog_reg_confirm_layout,
                     null);
-            builder.setDisplayLayout(displayView);
+//            builder.setDisplayLayout(displayView);
             TextView userType = (TextView) displayView.findViewById(R.id.user_type);
             TextView account = (TextView) displayView.findViewById(R.id.account);
             TextView pwd = (TextView) displayView.findViewById(R.id.pwd);
@@ -152,6 +164,7 @@ public class OpenAccountAccurateFragment extends LazyBaseFragment
             TextView jchg = (TextView) displayView.findViewById(R.id.jchg);
             TextView ag = (TextView) displayView.findViewById(R.id.ag);
             TextView ga = (TextView) displayView.findViewById(R.id.ga);
+            Button positiveButton = (Button) displayView.findViewById(R.id.positiveButton);
             userType.setText("用户类型：" + type);
             account.setText("登录账号:" + userName.getText().toString());
             pwd.setText("登录密码:" + userPassword.getText().toString());
@@ -162,12 +175,20 @@ public class OpenAccountAccurateFragment extends LazyBaseFragment
             ag.setText("AG游戏:" + bonusAg.getText().toString());
             ga.setText("GA游戏:" + bonusGame.getText().toString());
             //builder.setMessage(stringBuilder.toString());
-            builder.setLayoutSet(DialogLayout.SINGLE);
-            builder.setPositiveButton("确定", new DialogInterface.OnClickListener()
-            {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i)
-                {
+//            builder.setLayoutSet(DialogLayout.SINGLE);
+//            positiveButton.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//                }
+//            });
+            final Dialog dialog = builder.create();
+            dialog.show();
+            dialog.getWindow().setContentView(displayView);
+
+            positiveButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                public void onClick(View v) {
                     AccurateUserCommand accurateUserCommand = new AccurateUserCommand();
                     accurateUserCommand.setUsername(userName.getText().toString());
                     accurateUserCommand.setNickname(nickName.getText().toString());
@@ -182,12 +203,12 @@ public class OpenAccountAccurateFragment extends LazyBaseFragment
                     accurateUserCommand.setFb_all(Float.parseFloat(bonusHunhe.getText().toString()));
                     accurateUserCommand.setAg_percent(Float.parseFloat(bonusAg.getText().toString()));
                     accurateUserCommand.setGa_percent(Float.parseFloat(bonusGame.getText().toString()));
-                    
+
                     executeCommand(accurateUserCommand, restCallback, SUBMIT_COMMAND);
-                    dialogInterface.dismiss();
+                                    dialog.dismiss();
                 }
             });
-            builder.create().show();
+//            builder.create().show();
         }
     }
     
@@ -402,6 +423,11 @@ public class OpenAccountAccurateFragment extends LazyBaseFragment
                             
                             }
                         });
+
+                        bonus_danguan_tv.setText("% （共有"+userAccurateInfo.getUserSingle()+"%可以分配）");
+                        bonus_hunhe_tv.setText("% （共有"+userAccurateInfo.getUserMulti()+"%可以分配）");
+                        bonus_ag_tv.setText("% （共有"+userAccurateInfo.getUserAG()+"%可以分配）");
+                        bonus_game_tv.setText("% （共有"+userAccurateInfo.getUserGA()+"%可以分配）");
                     }
                     break;
                 case SUBMIT_COMMAND:
