@@ -37,7 +37,11 @@ public class QuotaAdapter extends BaseAdapter
     {
         return resultMap;
     }
-    
+
+    public ArrayList<QuotaBean> getData() {
+        return data;
+    }
+
     @Override
     public int getCount()
     {
@@ -64,6 +68,8 @@ public class QuotaAdapter extends BaseAdapter
     public View getView(int position, View convertView, ViewGroup parent)
     {
         ViewHolder viewHolder;
+        QuotaBean quotaBean=data.get(position);
+
         if (convertView == null)
         {
             convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_quota, parent, false);
@@ -76,6 +82,10 @@ public class QuotaAdapter extends BaseAdapter
                 {
                     int pos = (int) viewHolder.result.getTag();
                     resultMap.put(String.valueOf(data.get(pos).getQuota()), s.toString());
+
+                    quotaBean.setResult(s.toString());
+
+                    data.set(position,quotaBean);
                 }
             });
         } else

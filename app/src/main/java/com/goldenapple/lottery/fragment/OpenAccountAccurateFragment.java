@@ -13,10 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +37,7 @@ import com.goldenapple.lottery.data.PrizeGroupChild;
 import com.goldenapple.lottery.data.QuotaBean;
 import com.goldenapple.lottery.data.UserAccurateInfo;
 import com.goldenapple.lottery.view.adapter.QuotaAdapter;
+import com.goldenapple.lottery.view.adapter.QuotaAdapter2;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
@@ -99,6 +102,10 @@ public class OpenAccountAccurateFragment extends LazyBaseFragment
     private static final int SUBMIT_COMMAND = 2;
     
     private QuotaAdapter quotaAdapter;
+
+    private QuotaAdapter2 mQuotaAdapter2;
+
+    private ArrayList<QuotaBean> mQuotaList;
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -119,7 +126,7 @@ public class OpenAccountAccurateFragment extends LazyBaseFragment
     {
         user.setVisibility(View.INVISIBLE);
         quotaAdapter = new QuotaAdapter();
-        
+        mQuotaAdapter2 = new QuotaAdapter2();
         GetUserAccurateInfoCommand command = new GetUserAccurateInfoCommand();
         TypeToken typeToken = new TypeToken<RestResponse<UserAccurateInfo>>() {};
         RestRequest restRequest = RestRequestManager.createRequest(getActivity(), command, typeToken, restCallback,
@@ -152,7 +159,7 @@ public class OpenAccountAccurateFragment extends LazyBaseFragment
 //            CustomDialog.Builder builder = new CustomDialog.Builder(getContext());
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-            View displayView = LayoutInflater.from(getContext()).inflate(R.layout.alert_dialog_reg_confirm_layout,
+            View displayView = LayoutInflater.from(getContext()).inflate(R.layout.alert_dialog_reg_confirm_layout1,
                     null);
 //            builder.setDisplayLayout(displayView);
             TextView userType = (TextView) displayView.findViewById(R.id.user_type);
@@ -182,6 +189,10 @@ public class OpenAccountAccurateFragment extends LazyBaseFragment
 //
 //                }
 //            });
+            GridView grid_view=(GridView)displayView.findViewById(R.id.grid_view);
+            grid_view.setAdapter(mQuotaAdapter2);
+
+
             final Dialog dialog = builder.create();
             dialog.show();
             dialog.getWindow().setContentView(displayView);
@@ -315,7 +326,7 @@ public class OpenAccountAccurateFragment extends LazyBaseFragment
         }
         return false;
     }
-    
+
     private RestCallback restCallback = new RestCallback()
     {
         @Override
@@ -327,15 +338,17 @@ public class OpenAccountAccurateFragment extends LazyBaseFragment
                     if (response.getData() != null && response.getData() instanceof UserAccurateInfo)
                     {
                         UserAccurateInfo userAccurateInfo = (UserAccurateInfo) response.getData();
-                        if (userAccurateInfo.isIs_top_agent() == 0)
+                        if (userAccurateInfo.isIs_top_agent() == 0){
                             user.setVisibility(View.VISIBLE);
+                        }
+
+                       mQuotaList = getQuotaBeans(userAccurateInfo);
+
                         bonusCounts.addTextChangedListener(new TextWatcher()
                         {
                             @Override
                             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2)
-                            {
-                            
-                            }
+                            { }
                             
                             @Override
                             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2)
@@ -381,26 +394,15 @@ public class OpenAccountAccurateFragment extends LazyBaseFragment
                                         }
                                     } else
                                     {
-                                        LinkedHashMap<Integer, Integer> quotaMap = userAccurateInfo
-                                                .getUserAllPrizeSetQuota();
-                                        if (quotaMap == null || quotaMap.size() == 0)
-                                        {
-                                            return;
-                                        }
-                                        ArrayList<QuotaBean> quotaList = new ArrayList<>();
-                                        for (Map.Entry<Integer, Integer> entry : quotaMap.entrySet())
-                                        {
-                                            QuotaBean quotaBean = new QuotaBean();
-                                            quotaBean.setQuota(entry.getKey());
-                                            quotaBean.setMax(entry.getValue());
-                                            quotaList.add(quotaBean);
-                                        }
+
+                                        if (mQuotaList == null) return;
+
                                         CustomDialog.Builder builder = new CustomDialog.Builder(getContext());
                                         View displayView = LayoutInflater.from(getContext()).inflate(R.layout
                                                 .alert_dialog_prize_groups_layout, null);
                                         ListView listView = displayView.findViewById(R.id.list_view);
                                         listView.setAdapter(quotaAdapter);
-                                        quotaAdapter.setData(quotaList);
+                                        quotaAdapter.setData(mQuotaList);
                                         builder.setDisplayLayout(displayView);
                                         builder.setTitle("设置开户配额");
                                         builder.setLayoutSet(DialogLayout.SINGLE);
@@ -409,6 +411,7 @@ public class OpenAccountAccurateFragment extends LazyBaseFragment
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i)
                                             {
+                                                mQuotaAdapter2.setData(quotaAdapter.getData());
                                                 dialogInterface.dismiss();
                                             }
                                         });
@@ -424,10 +427,12 @@ public class OpenAccountAccurateFragment extends LazyBaseFragment
                             }
                         });
 
-                        bonus_danguan_tv.setText("% （共有"+userAccurateInfo.getUserSingle()+"%可以分配）");
+                        bonus_danguan_tv.setText("% （共有"+userAccurateInfo. getUserSingle()+"%可以分配）");
                         bonus_hunhe_tv.setText("% （共有"+userAccurateInfo.getUserMulti()+"%可以分配）");
                         bonus_ag_tv.setText("% （共有"+userAccurateInfo.getUserAG()+"%可以分配）");
                         bonus_game_tv.setText("% （共有"+userAccurateInfo.getUserGA()+"%可以分配）");
+
+                        mQuotaAdapter2.setData(mQuotaList);
                     }
                     break;
                 case SUBMIT_COMMAND:
@@ -436,7 +441,26 @@ public class OpenAccountAccurateFragment extends LazyBaseFragment
             }
             return true;
         }
-        
+
+        @Nullable
+        private ArrayList<QuotaBean> getQuotaBeans(UserAccurateInfo userAccurateInfo) {
+            LinkedHashMap<Integer, Integer> quotaMap = userAccurateInfo
+                    .getUserAllPrizeSetQuota();
+            if (quotaMap == null || quotaMap.size() == 0)
+            {
+                return null;
+            }
+            ArrayList<QuotaBean> mQuotaList = new ArrayList<>();
+            for (Map.Entry<Integer, Integer> entry : quotaMap.entrySet())
+            {
+                QuotaBean quotaBean = new QuotaBean();
+                quotaBean.setQuota(entry.getKey());
+                quotaBean.setMax(entry.getValue());
+                mQuotaList.add(quotaBean);
+            }
+            return mQuotaList;
+        }
+
         @Override
         public boolean onRestError(RestRequest request, int errCode, String errDesc)
         {
