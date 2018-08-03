@@ -106,14 +106,14 @@ public class InBoxAdapter extends BaseAdapter {
                 qQBadgeView.setBadgeNumber(0);
             }
         }*/
-        if(0==bean.getIs_readed()&&!mUnreadPositionList.contains(bean.getId())) {
+        if(0==bean.getIs_readed()&&!mUnreadPositionList.contains(String.valueOf(bean.getId()))) {
             refreshTextColor(holder,parent.getContext(),false);
         }else {
             refreshTextColor(holder,parent.getContext(),true);
         }
 
         holder.from_username.setText(bean.getSender());
-        holder.content.setText(bean.getMsg_type());
+        holder.content.setText(bean.getMsg_title());
         holder.time.setText(bean.getCreated_at());
 
         if(mStateIsEdit){

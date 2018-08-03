@@ -25,7 +25,6 @@ import com.goldenapple.lottery.base.net.RestResponse;
 import com.goldenapple.lottery.data.DeleteLettersCommand;
 import com.goldenapple.lottery.data.SendBoxCommand;
 import com.goldenapple.lottery.data.SendBoxResponse;
-import com.goldenapple.lottery.material.ConstantInformation;
 import com.goldenapple.lottery.view.adapter.OutBoxAdapter;
 import com.google.gson.reflect.TypeToken;
 

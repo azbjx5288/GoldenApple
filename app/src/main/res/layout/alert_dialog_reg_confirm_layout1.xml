@@ -125,13 +125,13 @@
                     android:layout_height="wrap_content"
                     android:text="配额数："/>
 
-                <GridView
+                <com.goldenapple.lottery.view.MyGridView
                     android:id="@+id/grid_view"
                     android:layout_width="match_parent"
                     android:numColumns="2"
                     android:layout_height="wrap_content">
 
-                </GridView>
+                </com.goldenapple.lottery.view.MyGridView>
 
 
                 <TextView

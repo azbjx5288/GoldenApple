@@ -120,7 +120,8 @@ public class ServiceCenterFragment extends BaseFragment {
         serviceParam.setBalance(String.format("%.4f", userInfo.getAbalance()));
         serviceParam.setRegTime(String.valueOf(userInfo.getSigninAt()));
         String userjson = Base64.encodeToString(GsonHelper.toJson(serviceParam).getBytes(), Base64.DEFAULT);
-        webView.loadUrl("http://s3.myapple888.com/index/app?companyId=70722524&style=default&mode=4&token=" + userjson);
+//        webView.loadUrl("http://s3.myapple888.com/index/app?companyId=70722524&style=default&mode=4&token=" + userjson);
+        webView.loadUrl("http://yafuweb.4385nt.com/mobile.php?userid="+userInfo.getId()+"&name="+userInfo.getName()+"&platform=2");
         webView.setWebChromeClient(mWebChromeClient);
 
         webView.setWebViewClient(new WebViewClient() {

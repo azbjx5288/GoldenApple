@@ -62,12 +62,12 @@ public class OutBoxAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        InBoxAdapter.ViewHolder holder;
+        OutBoxAdapter.ViewHolder holder;
         if (convertView == null) {
             convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.inbox_list_item, parent, false);
-            holder = new InBoxAdapter.ViewHolder(convertView);
+            holder = new OutBoxAdapter.ViewHolder(convertView);
         } else {
-            holder = (InBoxAdapter.ViewHolder) convertView.getTag();
+            holder = (OutBoxAdapter.ViewHolder) convertView.getTag();
         }
 
         SendBoxResponse bean = list.get(position);
@@ -112,7 +112,7 @@ public class OutBoxAdapter extends BaseAdapter {
         }
 
         holder.from_username.setText(bean.getSender());
-        holder.content.setText(bean.getMsg_type());
+        holder.content.setText(bean.getMsg_title());
         holder.time.setText(bean.getCreated_at());
 
         if(mStateIsEdit){
@@ -128,7 +128,7 @@ public class OutBoxAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private void refreshTextColor(InBoxAdapter.ViewHolder holder, Context context , boolean isRead) {
+    private void refreshTextColor(OutBoxAdapter.ViewHolder holder, Context context , boolean isRead) {
         if(isRead){
             holder.from_username.setTextColor(UiUtils.getColor(context,R.color.gray));
             holder.content.setTextColor(UiUtils.getColor(context,R.color.gray));

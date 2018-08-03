@@ -65,8 +65,8 @@ public class FragmentUser extends LazyBaseFragment {
     @BindView(R.id.link_openaccount_ll)
     LinearLayout link_openaccount_ll;
     private UserInfo userInfo;
-//    @BindView(R.id.station_letter_badge)
-//    TextView station_letter_badge;
+    @BindView(R.id.station_letter_badge)
+    TextView station_letter_badge;
     @BindView(R.id.station_letter_icon)
     ImageView station_letter_icon;
     @Override
@@ -283,38 +283,26 @@ public class FragmentUser extends LazyBaseFragment {
                     HtmlFragment.launch(FragmentUser.this, rechargeUrl.getUrl(), "充值中心");
                 }
             }else  if (request.getId() == LIST) {
-                if (request.getId() == 0) {
-                    String jsonString= ((JsonString) response.getData()).getJson();
+                String jsonString= ((JsonString) response.getData()).getJson();
 
-                    boolean  isShow=false;
-                    try {
-                        JSONObject jsonObject = new JSONObject(jsonString);
-                        isShow=jsonObject.getInt("is_show")==1?true:false;
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    int totalCount;
-
-                    if(isShow){
-                        totalCount =-1;
-                    }else{
-                        totalCount =0;
-                    }
-
-                    Object  tag=station_letter_icon.getTag();
-                    if(tag==null){
-                        QBadgeView qBadgeView=new QBadgeView(getActivity());
-                        qBadgeView.bindTarget(station_letter_icon);
-                        qBadgeView.setBadgeGravity(Gravity.END | Gravity.TOP);
-                        qBadgeView.setBadgeNumber(totalCount);
-                        station_letter_icon.setTag(qBadgeView);
-                    }else{
-                        QBadgeView qQBadgeView=(QBadgeView)tag;
-                        qQBadgeView.setBadgeNumber(totalCount);
-                    }
-
+                boolean  isShow=false;
+                try {
+                    JSONObject jsonObject = new JSONObject(jsonString);
+                    isShow=jsonObject.getInt("is_show")==1?true:false;
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
+
+                int totalCount;
+
+                if(isShow){
+                    totalCount =-1;
+                }else{
+                    totalCount =0;
+                }
+
+                showBadgeCount(totalCount);
+
             }
             return true;
         }
@@ -339,4 +327,18 @@ public class FragmentUser extends LazyBaseFragment {
             }
         }
     };
+
+    private void showBadgeCount(int totalCount) {
+        Object  tag=station_letter_badge.getTag();
+        if(tag==null){
+            QBadgeView qBadgeView=new QBadgeView(getActivity());
+            qBadgeView.bindTarget(station_letter_badge);
+            qBadgeView.setBadgeGravity(Gravity.END | Gravity.TOP);
+            qBadgeView.setBadgeNumber(totalCount);
+            station_letter_badge.setTag(qBadgeView);
+        }else{
+            QBadgeView qQBadgeView=(QBadgeView)tag;
+            qQBadgeView.setBadgeNumber(totalCount);
+        }
+    }
 }
