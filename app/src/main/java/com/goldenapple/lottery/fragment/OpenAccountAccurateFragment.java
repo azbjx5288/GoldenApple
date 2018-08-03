@@ -133,6 +133,33 @@ public class OpenAccountAccurateFragment extends LazyBaseFragment
                 GET_USER_INFO_COMMAND, this);
         restRequest.execute();
     }
+
+
+    private void  initEditText(EditText editText,float  MaxValue){
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2){
+                //这里需要注意，必须先判断mEtEndTimeRepeatTimes.getText()是否为空才能使用Integer.parseInt，否则会报异常。
+                if((editText.getText()!=null) &&
+                        !("".equals(editText.getText().toString()))){
+
+                    if(Double.parseDouble(String.valueOf(editText.getText())) > MaxValue){
+                        editText.setText(String.valueOf(MaxValue));
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+    }
     
     @OnClick(R.id.rebates_setting_btn)
     public void onViewClicked()
@@ -427,10 +454,17 @@ public class OpenAccountAccurateFragment extends LazyBaseFragment
                             }
                         });
 
-                        bonus_danguan_tv.setText("% （共有"+userAccurateInfo. getUserSingle()+"%可以分配）");
+                        bonus_danguan_tv.setText("% （共有"+userAccurateInfo.getUserSingle()+"%可以分配）");
                         bonus_hunhe_tv.setText("% （共有"+userAccurateInfo.getUserMulti()+"%可以分配）");
                         bonus_ag_tv.setText("% （共有"+userAccurateInfo.getUserAG()+"%可以分配）");
                         bonus_game_tv.setText("% （共有"+userAccurateInfo.getUserGA()+"%可以分配）");
+
+
+                        initEditText(bonusDanguan,userAccurateInfo.getUserSingle());
+                        initEditText(bonusHunhe,userAccurateInfo.getUserMulti());
+                        initEditText(bonusAg,userAccurateInfo.getUserAG());
+                        initEditText(bonusGame,userAccurateInfo.getUserGA());
+
 
                         mQuotaAdapter2.setData(mQuotaList);
                     }

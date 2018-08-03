@@ -87,6 +87,17 @@ public class QuotaAdapter extends BaseAdapter
 
                     data.set(position,quotaBean);
                 }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2){
+                    //这里需要注意，必须先判断mEtEndTimeRepeatTimes.getText()是否为空才能使用Integer.parseInt，否则会报异常。
+                    if((  viewHolder.result.getText()!=null) &&
+                            !("".equals(  viewHolder.result.getText().toString()))){
+                        if(Double.parseDouble(String.valueOf( viewHolder.result.getText())) > data.get(position).getMax()){
+                            viewHolder.result.setText(String.valueOf(data.get(position).getMax()));
+                        }
+                    }
+                }
             });
         } else
         {
