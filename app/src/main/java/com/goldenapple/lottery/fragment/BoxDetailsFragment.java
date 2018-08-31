@@ -63,9 +63,9 @@ public class BoxDetailsFragment extends BaseFragment {
         msg_id = getArguments().getInt("msg_id");
         msgType = getArguments().getString("msgType");//receive:收件箱，send:发件箱
         if ("receive".equals(msgType)) {
-            return inflateView(inflater, container, false, "收件箱", R.layout.box_details, true, true);
+            return inflateView(inflater, container, "收件箱", R.layout.box_details, true, true);
         } else {
-            return inflateView(inflater, container, false, "发件箱", R.layout.box_details, true, true);
+            return inflateView(inflater, container, "发件箱", R.layout.box_details, true, true);
         }
     }
 

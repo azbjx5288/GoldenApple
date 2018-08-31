@@ -11,7 +11,7 @@
         android:layout_height="48dp"
         android:background="@color/app_main">
         <ImageButton
-            android:id="@android:id/home"
+            android:id="@+id/home"
             android:layout_width="40dp"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
@@ -20,7 +20,6 @@
             android:src="@drawable/back"/>
 
         <TextView
-            android:id="@android:id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"

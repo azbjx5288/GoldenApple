@@ -76,7 +76,7 @@ public class OutBoxFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_outbox, container, false);
+        return inflater.inflate(R.layout.fragment_outbox, null, false);
     }
 
     @Override
@@ -144,10 +144,10 @@ public class OutBoxFragment extends BaseFragment {
         }
     }
 
-    @OnClick({android.R.id.home, R.id.edit, R.id.select_all, R.id.delete})
+    @OnClick({R.id.home, R.id.edit, R.id.select_all, R.id.delete})
     public void onClick(View view) {
         switch (view.getId()) {
-            case android.R.id.home:
+            case R.id.home:
                 getActivity().finish();
                 break;
             case R.id.edit:

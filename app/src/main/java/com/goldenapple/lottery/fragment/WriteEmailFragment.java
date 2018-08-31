@@ -75,7 +75,7 @@ public class WriteEmailFragment extends BaseFragment implements RadioGroup.OnChe
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflateView(inflater, container, "写邮件", R.layout.fragment_writeemail,true,true);
+        return inflateView(inflater, container, "发信息", R.layout.fragment_writeemail,true,true);
     }
 
     @Override
@@ -136,9 +136,20 @@ public class WriteEmailFragment extends BaseFragment implements RadioGroup.OnChe
                     showToast("请输入标题", Toast.LENGTH_SHORT);
                     return;
                 }
+                if (title.length()>20) {
+                    showToast("标题最多20个字符", Toast.LENGTH_SHORT);
+                    return;
+                }
                 if (multiline.isEmpty()) {
                     showToast("请输入邮件内容", Toast.LENGTH_SHORT);
                     return;
+                }
+
+                if(mLowerList.size()==0){
+                    if(mUserType==2||mUserType==3){//1:上级2:所有下级3:单一下级)
+                        showToast("没有收信人", Toast.LENGTH_SHORT);
+                        return;
+                    }
                 }
 
                 sendMsgCommand.setTitle(title);
@@ -147,7 +158,7 @@ public class WriteEmailFragment extends BaseFragment implements RadioGroup.OnChe
                 if(mUserType==3){
                     sendMsgCommand.setReceiver(mReceiver);
                 }
-                submit.setEnabled(false);
+//                submit.setEnabled(false);
                 executeCommand(sendMsgCommand, restCallback, TRACE_SENDMSG_COMMAND);
                 break;
         }
@@ -195,9 +206,9 @@ public class WriteEmailFragment extends BaseFragment implements RadioGroup.OnChe
                         e.printStackTrace();
                     }
                     if(mIsTopAgent){
-                        ownership.setVisibility(View.VISIBLE);
-                    }else {
                         ownership.setVisibility(View.GONE);
+                    }else {
+                        ownership.setVisibility(View.VISIBLE);
                     }
                     break;
             }
