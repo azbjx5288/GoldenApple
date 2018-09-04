@@ -134,8 +134,8 @@ public class OpenAccountAccurateFragment extends LazyBaseFragment
         restRequest.execute();
     }
 
-
-    private void  initEditText(EditText editText,float  MaxValue){
+    //DECIMAL_DIGITS = 1;//小数的位数
+    private void  initEditText(EditText editText,float  MaxValue,int DECIMAL_DIGITS){
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -143,7 +143,7 @@ public class OpenAccountAccurateFragment extends LazyBaseFragment
             }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2){
+            public void onTextChanged(CharSequence s, int i, int i1, int i2){
                 //这里需要注意，必须先判断mEtEndTimeRepeatTimes.getText()是否为空才能使用Integer.parseInt，否则会报异常。
                 if((editText.getText()!=null) &&
                         !("".equals(editText.getText().toString()))){
@@ -151,7 +151,35 @@ public class OpenAccountAccurateFragment extends LazyBaseFragment
                     if(Double.parseDouble(String.valueOf(editText.getText())) > MaxValue){
                         editText.setText(String.valueOf(MaxValue));
                     }
+
+
+                    //限制小数的位数 start
+                    if (DECIMAL_DIGITS>0) {
+                        if (s.toString().contains(".")) {
+                            if (s.length() - 1 - s.toString().indexOf(".") > DECIMAL_DIGITS) {
+                                s = s.toString().subSequence(0,
+                                        s.toString().indexOf(".") + DECIMAL_DIGITS+1);
+                                editText.setText(s);
+                                editText.setSelection(s.length());
+                            }
+                        }
+                        if (s.toString().trim().substring(0).equals(".")) {
+                            s = "0" + s;
+                            editText.setText(s);
+                            editText.setSelection(2);
+                        }
+                        if (s.toString().startsWith("0")
+                                && s.toString().trim().length() > 1) {
+                            if (!s.toString().substring(1, 2).equals(".")) {
+                                editText.setText(s.subSequence(0, 1));
+                                editText.setSelection(1);
+                                return;
+                            }
+                        }
+                    }
                 }
+                //限制小数的位数  end
+
             }
 
             @Override
@@ -202,12 +230,19 @@ public class OpenAccountAccurateFragment extends LazyBaseFragment
             userType.setText("用户类型：" + type);
             account.setText("登录账号:" + userName.getText().toString());
             pwd.setText("登录密码:" + userPassword.getText().toString());
-            nick.setText("登录账号:" + nickName.getText().toString());
-            numPrizeGroup.setText("数字彩奖金组:" + bonusCounts.getText().toString());
-            jcdg.setText("竞彩单关:" + bonusDanguan.getText().toString());
-            jchg.setText("竞彩混关:" + bonusHunhe.getText().toString());
-            ag.setText("AG游戏:" + bonusAg.getText().toString());
-            ga.setText("GA游戏:" + bonusGame.getText().toString());
+            nick.setText("用户昵称:" + nickName.getText().toString());
+            if(Integer.parseInt(bonusCounts.getText().toString()) <= 1950){
+                numPrizeGroup.setVisibility(View.GONE);
+            }else{
+                numPrizeGroup.setText("数字彩奖金组:" + bonusCounts.getText().toString());
+                numPrizeGroup.setVisibility(View.VISIBLE);
+            }
+
+
+            jcdg.setText("竞彩单关:" + bonusDanguan.getText().toString()+"%");
+            jchg.setText("竞彩混关:" + bonusHunhe.getText().toString()+"%");
+            ag.setText("AG游戏:" + bonusAg.getText().toString()+"%");
+            ga.setText("GA游戏:" + bonusGame.getText().toString()+"%");
             //builder.setMessage(stringBuilder.toString());
 //            builder.setLayoutSet(DialogLayout.SINGLE);
 //            positiveButton.setOnClickListener(new View.OnClickListener() {
@@ -235,7 +270,7 @@ public class OpenAccountAccurateFragment extends LazyBaseFragment
                     HashMap<String, String> map = new HashMap<>();
                     map.put("1", bonusCounts.getText().toString());
                     accurateUserCommand.setSeries_prize_group_json(GsonHelper.toJson(map));
-                    accurateUserCommand.setAgent_prize_set_quota(Integer.parseInt(bonusCounts.getText().toString()) <
+                    accurateUserCommand.setAgent_prize_set_quota(Integer.parseInt(bonusCounts.getText().toString()) <=
                             1950 ? null : GsonHelper.toJson(quotaAdapter.getResultMap()));
                     accurateUserCommand.setFb_single(Float.parseFloat(bonusDanguan.getText().toString()));
                     accurateUserCommand.setFb_all(Float.parseFloat(bonusHunhe.getText().toString()));
@@ -382,7 +417,7 @@ public class OpenAccountAccurateFragment extends LazyBaseFragment
                             {
                                 if (!TextUtils.isEmpty(charSequence))
                                 {
-                                    if (Integer.parseInt(charSequence.toString()) < 1950)
+                                    if (Integer.parseInt(charSequence.toString()) <= 1950)
                                     {
                                         if (proxy.isChecked())
                                         {
@@ -398,6 +433,7 @@ public class OpenAccountAccurateFragment extends LazyBaseFragment
                                                                 (charSequence.toString())) / 2000l;
                                                         //returnPoint = (float) (Math.round((returnPoint * 1000 /
                                                         // 1000)));
+                                                        returnPoint=returnPoint*100;
                                                         bonusRebate.setText("对应返点" + returnPoint + "%");
                                                     }
                                                 }
@@ -415,6 +451,7 @@ public class OpenAccountAccurateFragment extends LazyBaseFragment
                                                                 (charSequence.toString())) / 2000l;
                                                         //returnPoint = (float) (Math.round((returnPoint * 1000 /
                                                         // 1000)));
+                                                        returnPoint=returnPoint*100;
                                                         bonusRebate.setText("对应返点" + returnPoint + "%");
                                                     }
                                                 }
@@ -440,6 +477,12 @@ public class OpenAccountAccurateFragment extends LazyBaseFragment
                                             {
                                                 mQuotaAdapter2.setData(quotaAdapter.getData());
                                                 dialogInterface.dismiss();
+                                                if (proxy.isChecked())
+                                                {
+                                                    bonusCounts.setText(userAccurateInfo.getAgentCurrentPrize()+"");
+                                                }else{
+                                                    bonusCounts.setText(userAccurateInfo.getCurrentPrize()+"");
+                                                }
                                             }
                                         });
                                         builder.create().show();
@@ -460,10 +503,10 @@ public class OpenAccountAccurateFragment extends LazyBaseFragment
                         bonus_game_tv.setText("% （共有"+userAccurateInfo.getUserGA()+"%可以分配）");
 
 
-                        initEditText(bonusDanguan,userAccurateInfo.getUserSingle());
-                        initEditText(bonusHunhe,userAccurateInfo.getUserMulti());
-                        initEditText(bonusAg,userAccurateInfo.getUserAG());
-                        initEditText(bonusGame,userAccurateInfo.getUserGA());
+                        initEditText(bonusDanguan,userAccurateInfo.getUserSingle(),0);
+                        initEditText(bonusHunhe,userAccurateInfo.getUserMulti(),0);
+                        initEditText(bonusAg,userAccurateInfo.getUserAG(),1);
+                        initEditText(bonusGame,userAccurateInfo.getUserGA(),1);
 
 
                         mQuotaAdapter2.setData(mQuotaList);

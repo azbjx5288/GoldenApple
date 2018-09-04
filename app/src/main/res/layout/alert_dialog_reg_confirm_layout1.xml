@@ -81,6 +81,7 @@
                         <TextView
                             android:id="@+id/num_prize_group"
                             android:layout_width="0dp"
+                            android:visibility="gone"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="数字彩奖金组："/>

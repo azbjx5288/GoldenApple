@@ -204,7 +204,6 @@
                     android:paddingLeft="5dp"
                     android:background="@drawable/shape_rounded_bg2"
                     android:gravity="center_vertical"
-                    android:hint="由2-16个字符组成"
                     android:inputType="number"
                     android:maxLines="1"
                     android:textColor="#666666"
@@ -266,13 +265,13 @@
                     android:layout_height="30dp"
                     android:background="@drawable/shape_rounded_bg2"
                     android:gravity="center_vertical"
-                    android:paddingLeft="5dp"
                     android:hint="0"
                     android:inputType="number|numberDecimal"
+                    android:paddingLeft="5dp"
+                    android:text="0.0"
                     android:textColor="#666666"
                     android:textColorHint="#666666"
-                    android:textSize="14sp"
-                />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/bonus_danguan_tv"
@@ -303,12 +302,13 @@
                     android:layout_height="30dp"
                     android:background="@drawable/shape_rounded_bg2"
                     android:gravity="center_vertical"
-                    android:paddingLeft="5dp"
                     android:hint="0"
                     android:inputType="number|numberDecimal"
+                    android:paddingLeft="5dp"
+                    android:text="0.0"
                     android:textColor="#666666"
                     android:textColorHint="#666666"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/bonus_hunhe_tv"
@@ -339,12 +339,13 @@
                     android:layout_height="30dp"
                     android:background="@drawable/shape_rounded_bg2"
                     android:gravity="center_vertical"
-                    android:paddingLeft="5dp"
                     android:hint="0.0"
                     android:inputType="number|numberDecimal"
+                    android:paddingLeft="5dp"
+                    android:text="0.0"
                     android:textColor="#666666"
                     android:textColorHint="#666666"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/bonus_ag_tv"
@@ -375,13 +376,13 @@
                     android:layout_height="30dp"
                     android:background="@drawable/shape_rounded_bg2"
                     android:gravity="center_vertical"
-                    android:paddingLeft="5dp"
                     android:hint="0.0"
                     android:inputType="number|numberDecimal"
+                    android:paddingLeft="5dp"
+                    android:text="0.0"
                     android:textColor="#666666"
                     android:textColorHint="#666666"
-                    android:textSize="14sp"
-                />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/bonus_game_tv"
