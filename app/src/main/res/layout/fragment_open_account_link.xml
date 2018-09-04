@@ -170,12 +170,10 @@
                     android:layout_height="45dp"
                     android:background="@drawable/shape_rounded_bg2"
                     android:gravity="center_vertical"
-                    android:hint="由2-16个字符组成"
                     android:inputType="number"
                     android:maxLines="1"
                     android:textColorHint="@color/text_middle"
-                    android:textSize="12sp"
-                />
+                    android:textSize="12sp" />
                 <TextView
                     android:id="@+id/bonus_rebate"
                     android:layout_width="wrap_content"
@@ -230,9 +228,9 @@
                     android:hint="0"
                     android:inputType="number"
                     android:maxLines="1"
+                    android:text="0.0"
                     android:textColorHint="@color/text_middle"
-                    android:textSize="12sp"
-                />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -263,8 +261,9 @@
                     android:hint="0"
                     android:inputType="number"
                     android:maxLines="1"
+                    android:text="0.0"
                     android:textColorHint="@color/text_middle"
-                    android:textSize="12sp"/>
+                    android:textSize="12sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -295,8 +294,9 @@
                     android:hint="0.0"
                     android:inputType="number|numberDecimal"
                     android:maxLines="1"
+                    android:text="0.0"
                     android:textColorHint="@color/text_middle"
-                    android:textSize="12sp"/>
+                    android:textSize="12sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -328,9 +328,9 @@
                     android:hint="0.0"
                     android:inputType="number|numberDecimal"
                     android:maxLines="1"
+                    android:text="0.0"
                     android:textColorHint="@color/text_middle"
-                    android:textSize="12sp"
-                />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:layout_width="wrap_content"

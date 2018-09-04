@@ -164,7 +164,62 @@ public class OpenAccountLinkFragment extends LazyBaseFragment
                 GET_USER_INFO_COMMAND, this);
         restRequest.execute();
     }
-    
+
+    //DECIMAL_DIGITS = 1;//小数的位数
+    private void  initEditText(EditText editText,float  MaxValue,int DECIMAL_DIGITS){
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int i, int i1, int i2){
+                //这里需要注意，必须先判断mEtEndTimeRepeatTimes.getText()是否为空才能使用Integer.parseInt，否则会报异常。
+                if((editText.getText()!=null) &&
+                        !("".equals(editText.getText().toString()))){
+
+                    if(Double.parseDouble(String.valueOf(editText.getText())) > MaxValue){
+                        editText.setText(String.valueOf(MaxValue));
+                    }
+
+
+                    //限制小数的位数 start
+                    if (DECIMAL_DIGITS>0) {
+                        if (s.toString().contains(".")) {
+                            if (s.length() - 1 - s.toString().indexOf(".") > DECIMAL_DIGITS) {
+                                s = s.toString().subSequence(0,
+                                        s.toString().indexOf(".") + DECIMAL_DIGITS+1);
+                                editText.setText(s);
+                                editText.setSelection(s.length());
+                            }
+                        }
+                        if (s.toString().trim().substring(0).equals(".")) {
+                            s = "0" + s;
+                            editText.setText(s);
+                            editText.setSelection(2);
+                        }
+                        if (s.toString().startsWith("0")
+                                && s.toString().trim().length() > 1) {
+                            if (!s.toString().substring(1, 2).equals(".")) {
+                                editText.setText(s.subSequence(0, 1));
+                                editText.setSelection(1);
+                                return;
+                            }
+                        }
+                    }
+                }
+                //限制小数的位数  end
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+    }
+
     @OnClick(R.id.rebates_setting_btn)
     public void onViewClicked()
     {
@@ -205,11 +260,17 @@ public class OpenAccountLinkFragment extends LazyBaseFragment
             account.setText("链接有效期:" + validDays);
             pwd.setText("推广渠道:" + channel.getText().toString());
             nick.setText("推广QQ:" + qq.getText().toString());
-            numPrizeGroup.setText("数字彩奖金组:" + bonusCounts.getText().toString());
-            jcdg.setText("竞彩单关:" + bonusDanguan.getText().toString());
-            jchg.setText("竞彩混关:" + bonusHunhe.getText().toString());
-            ag.setText("AG游戏:" + bonusAg.getText().toString());
-            ga.setText("GA游戏:" + bonusGame.getText().toString());
+//            numPrizeGroup.setText("数字彩奖金组:" + bonusCounts.getText().toString());
+            if(Integer.parseInt(bonusCounts.getText().toString()) <= 1950){
+                numPrizeGroup.setVisibility(View.GONE);
+            }else{
+                numPrizeGroup.setText("数字彩奖金组:" + bonusCounts.getText().toString());
+                numPrizeGroup.setVisibility(View.VISIBLE);
+            }
+            jcdg.setText("竞彩单关:" + bonusDanguan.getText().toString()+"%");
+            jchg.setText("竞彩混关:" + bonusHunhe.getText().toString()+"%");
+            ag.setText("AG游戏:" + bonusAg.getText().toString()+"%");
+            ga.setText("GA游戏:" + bonusGame.getText().toString()+"%");
             //builder.setMessage(stringBuilder.toString());
             builder.setLayoutSet(DialogLayout.SINGLE);
             builder.setPositiveButton("确定", new DialogInterface.OnClickListener()
@@ -224,7 +285,7 @@ public class OpenAccountLinkFragment extends LazyBaseFragment
                     linkUserCommand.setIs_agent(proxy.isChecked() ? 1 : 0);
                     HashMap<String, String> map = new HashMap<>();
                     map.put("1", bonusCounts.getText().toString());
-                    linkUserCommand.setAgent_prize_set_quota(Integer.parseInt(bonusCounts.getText().toString()) <
+                    linkUserCommand.setAgent_prize_set_quota(Integer.parseInt(bonusCounts.getText().toString()) <=
                             1950 ? null : GsonHelper.toJson(quotaAdapter.getResultMap()));
                     linkUserCommand.setSeries_prize_group_json(GsonHelper.toJson(map));
                     linkUserCommand.setFb_single(Float.parseFloat(bonusDanguan.getText().toString()));
@@ -280,7 +341,7 @@ public class OpenAccountLinkFragment extends LazyBaseFragment
                             {
                                 if (!TextUtils.isEmpty(charSequence))
                                 {
-                                    if (Integer.parseInt(charSequence.toString()) < 1950)
+                                    if (Integer.parseInt(charSequence.toString()) <= 1950)
                                     {
                                         if (proxy.isChecked())
                                         {
@@ -296,6 +357,7 @@ public class OpenAccountLinkFragment extends LazyBaseFragment
                                                                 (charSequence.toString())) / 2000l;
                                                         //returnPoint = (float) (Math.round((returnPoint * 1000 /
                                                         // 1000)));
+                                                        returnPoint=returnPoint*100;
                                                         bonusRebate.setText("对应返点" + returnPoint + "%");
                                                     }
                                                 }
@@ -313,6 +375,7 @@ public class OpenAccountLinkFragment extends LazyBaseFragment
                                                                 (charSequence.toString())) / 2000l;
                                                         //returnPoint = (float) (Math.round((returnPoint * 1000 /
                                                         // 1000)));
+                                                        returnPoint=returnPoint*100;
                                                         bonusRebate.setText("对应返点" + returnPoint + "%");
                                                     }
                                                 }
@@ -348,6 +411,12 @@ public class OpenAccountLinkFragment extends LazyBaseFragment
                                             public void onClick(DialogInterface dialogInterface, int i)
                                             {
                                                 dialogInterface.dismiss();
+                                                if (proxy.isChecked())
+                                                {
+                                                    bonusCounts.setText(userAccurateInfo.getAgentCurrentPrize()+"");
+                                                }else{
+                                                    bonusCounts.setText(userAccurateInfo.getCurrentPrize()+"");
+                                                }
                                             }
                                         });
                                         builder.create().show();
@@ -361,6 +430,11 @@ public class OpenAccountLinkFragment extends LazyBaseFragment
                             
                             }
                         });
+
+                        initEditText(bonusDanguan,userAccurateInfo.getUserSingle(),0);
+                        initEditText(bonusHunhe,userAccurateInfo.getUserMulti(),0);
+                        initEditText(bonusAg,userAccurateInfo.getUserAG(),1);
+                        initEditText(bonusGame,userAccurateInfo.getUserGA(),1);
                     }
                     break;
                 case SUBMIT_COMMAND:
