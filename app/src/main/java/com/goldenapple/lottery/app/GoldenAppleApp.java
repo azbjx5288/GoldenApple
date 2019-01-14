@@ -21,7 +21,7 @@ import com.umeng.analytics.MobclickAgent;
  * Created by Alashi on 2015/12/22.
  */
 public class GoldenAppleApp extends Application {
-    public static final boolean SERVER_TYPE = false;//true:正式服；false：测试服
+    public static final boolean SERVER_TYPE = true;//true:正式服；false：测试服
     private static GoldenAppleApp sApp;
     private String baseUrl = "";
     private ThreadPool threadPool;
@@ -51,8 +51,14 @@ public class GoldenAppleApp extends Application {
         if (SERVER_TYPE) {
             baseUrl = "http://jpg888.org";  // 正式服
         } else {
-            // baseUrl = "http://api.jpg888.net";//测试服 jpgapi.4385nt.com
-            baseUrl = "http://jpgapi.4385nt.com";
+            //   baseUrl = "http://api.jpg888.net";//测试服 jpgapi.4385nt.com
+//            baseUrl = "http://jpgapi.4385nt.com";
+            baseUrl = "http://jpgapi4.4385nt.com";
+//            baseUrl = "http://jpgapi2.4385nt.com";
+//           baseUrl = "http://jpgapi.4385nt.com";
+
+
+
         }
         userCentre = new UserCentre(this, baseUrl);
         mQueues = Volley.newRequestQueue(getApplicationContext());

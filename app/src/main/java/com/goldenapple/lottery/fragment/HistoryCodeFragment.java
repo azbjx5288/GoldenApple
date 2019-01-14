@@ -59,7 +59,7 @@ public class HistoryCodeFragment extends BaseFragment implements RadioGroup.OnCh
         Bundle bundle = new Bundle();
         bundle.putSerializable("lottery", lottery);
         BaseFragment resultsFragment = FragmentDelayer.newInstance(R.drawable.ic_tab_classify, ResultsFragment.class.getName(), bundle);
-        BaseFragment chartTrendFragment = FragmentDelayer.newInstance(R.drawable.ic_tab_discover, ChartTrendWebviewFragment.class.getName(), bundle);
+        BaseFragment chartTrendFragment = FragmentDelayer.newInstance(R.drawable.ic_tab_discover, ChartTrendFragment.class.getName(), bundle);
         fragments.add(resultsFragment);
         fragments.add(chartTrendFragment);
     }

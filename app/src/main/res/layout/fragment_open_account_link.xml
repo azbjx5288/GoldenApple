@@ -77,7 +77,7 @@
                     android:layout_width="100dp"
                     android:layout_gravity="center_vertical"
                     android:layout_height="wrap_content"
-                    android:gravity="right"
+                    android:gravity="left"
                     android:text="链接有效期："/>
 
                 <Spinner
@@ -88,8 +88,16 @@
                     android:gravity="center_vertical"
                     android:maxLines="1"
                     android:textColorHint="@color/text_middle"
+                    android:spinnerMode="dropdown"
+                    android:popupBackground="@android:color/white"
+                    android:background="@drawable/spbg"
+                    android:paddingLeft="20dp"
+
                     android:textSize="12sp"
                 />
+                <android.support.v4.widget.Space
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
             <LinearLayout
@@ -101,7 +109,7 @@
                 <TextView
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:gravity="right"
+                    android:gravity="left"
                     android:text="推广渠道："/>
 
                 <EditText
@@ -115,6 +123,9 @@
                     android:textColorHint="@color/text_middle"
                     android:textSize="12sp"
                 />
+                <android.support.v4.widget.Space
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
             <LinearLayout
@@ -126,7 +137,7 @@
                 <TextView
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:gravity="right"
+                    android:gravity="left"
                     android:text="推广QQ："/>
 
                 <EditText
@@ -141,6 +152,9 @@
                     android:textColorHint="@color/text_middle"
                     android:textSize="12sp"
                 />
+                <android.support.v4.widget.Space
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
 
@@ -167,7 +181,7 @@
                 <EditText
                     android:id="@+id/bonus_counts"
                     android:layout_width="150dp"
-                    android:layout_height="45dp"
+                    android:layout_height="35dp"
                     android:background="@drawable/shape_rounded_bg2"
                     android:gravity="center_vertical"
                     android:inputType="number"
@@ -183,12 +197,12 @@
 
             </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="60dp"
-                android:text="最高可设置1960"/>
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="10dp"-->
+                <!--android:layout_marginStart="60dp"-->
+                <!--android:text="最高可设置1960"/>-->
 
 
             <TextView
@@ -233,9 +247,10 @@
                     android:textSize="12sp" />
 
                 <TextView
+                    android:id="@+id/bonus_danguan_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="% （一共有6%可以分配）"/>
+                    />
 
             </LinearLayout>
 
@@ -266,9 +281,10 @@
                     android:textSize="12sp" />
 
                 <TextView
+                    android:id="@+id/bonus_hunhe_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="% （一共有10%可以分配）"/>
+                    />
 
             </LinearLayout>
 
@@ -299,9 +315,10 @@
                     android:textSize="12sp" />
 
                 <TextView
+                    android:id="@+id/bonus_ag_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="% （一共有0.6%可以分配）"/>
+                    />
 
             </LinearLayout>
 
@@ -333,9 +350,10 @@
                     android:textSize="12sp" />
 
                 <TextView
+                    android:id="@+id/bonus_game_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="% （一共有6%可以分配）"/>
+                    />
 
             </LinearLayout>
         </LinearLayout>
